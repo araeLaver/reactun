@@ -15,6 +15,14 @@
   }
 }
 
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
 
 /* 배경 스타일 */
 body, .App {
@@ -37,21 +45,126 @@ body, .App {
   }
 }
 
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@media (max-width: 768px) {
+  .button-container button,
+  .auto-generate-options button {
+    width: 100%;
+    margin: 5px 0; /* 모바일에서 버튼을 위아래로 쌓음 */
+  }
+  /* .chart-container {
+    width: 100%;
+    height: auto;
+  } */
+
+
+
+}
+
+/* 반응형 미디어 쿼리 */
+@media screen and (max-width: 768px) {
+  .App-header {
+    flex-direction: column;
+  }
+
+  .button-container,
+  .auto-generate-options {
+    flex-direction: column;
+  }
+
+  .button, .auto-generate-option, .auto-generate-stop {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 18px;
+    width: 90%;
+  }
+  /* .chart-container, .table-container {
+    width: 100%;
+  } */
+
+  .stats-table, .table {
+    font-size: 14px;
+  }
+
+  /* .chart-container {
+    height: 200px;
+  } */
+
+  .table {
+    width: 100%; /* 모바일 화면에서는 테이블 너비 100%로 조정 */
+    /* display: block; */
+    /* overflow-x: auto; */
+  }
+
+  .table td { 
+    /* 셀을 블록 레벨 요소로 만들고, 필요한 스타일을 추가 */
+    position: relative;
+    padding-left: 50%; /* 텍스트 시작 부분에 여백을 줌 */
+    text-align: right; /* 텍스트를 오른쪽으로 정렬 */
+  }
+
+  .table td:before { 
+    /* 모바일 화면에서 각 셀에 표시될 라벨 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 45%; /* 라벨의 너비 */
+    padding-right: 10px; /* 라벨과 텍스트 사이의 여백 */
+    white-space: nowrap; /* 라벨 텍스트가 줄바꿈 되지 않도록 처리 */
+    text-align: left; /* 라벨 텍스트 왼쪽 정렬 */
+    font-weight: bold;
+    content: attr(data-label); /* data-label 속성값을 내용으로 사용 */
+  }
+  
+  /* 차트와 통계 테이블을 감싸는 컨테이너 */
+  .graph-and-selector-container {
+    flex-direction: column; /* 모바일 화면에서는 수직으로 정렬 */
+  }
+
+  .chart-container, .selection-and-table-container {
+    width: 100%; /* 컨테이너 너비를 화면 너비에 맞춤 */
+    margin-bottom: 20px; /* 아래 요소와의 여백 추가 */
+  }
+
+  /* 모바일 화면에서 차트 가운데 정렬 */
+  .chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
+.chart-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-} */
+  align-items: center;
+}
+
+
+/* 추가된 클래스 스타일 */
+.lottoNumbersList {
+  display: block; /* 기본적으로 블록 요소로 표시 */
+  margin: 10px 0;
+}
+
+.lottoNumber {
+  display: inline-block; /* 번호를 인라인 블록으로 표시 */
+  padding: 5px;
+  border: 1px solid #ddd;
+  margin: 5px;
+  border-radius: 5px;
+}
 
 /* 스타일 추가 */
 .App-header {
   font-family: 'Arial', sans-serif; /* 폰트 변경 */
   text-align: center; /* 헤더 내 모든 요소를 중앙 정렬 */
+ 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* padding: 20px; */
 }
 
 .App-header h2 {
@@ -102,9 +215,16 @@ h2 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 상자 그림자 효과 추가 */
   border-radius: 8px; /* 테두리 둥근 모서리 설정 */
 }
+.table-container {
+  overflow-x: auto; /* 가로로 스크롤 가능하게 설정 */
+}
 
 .table {
-  width: 20%; /* 테이블 너비 조정 */
+  width: 55%; 
+  /* 테이블 너비 조정 */
+  max-width: none; /* 최대 너비 설정을 제거 */
+  margin: auto; /* 중앙 정렬 */
+  /* width: 100%; */
   margin: 20px auto;
   border-collapse: collapse;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* 그림자 효과 추가 */
@@ -118,7 +238,10 @@ h2 {
   padding: 8px; /* 셀 내부의 패딩 설정 */
   text-align: center; /* 텍스트 중앙 정렬 */
   font-size: 1rem; /* 폰트 크기 설정 */
+  font-weight: bold; /* 번호 볼드 처리 */
+  color: #555; /* 기존의 색상 유지 */
 }
+
 
 .table th {
   background-color: #f2f2f2; /* 테이블 헤더 배경 색상 */
@@ -245,6 +368,17 @@ h2 {
   justify-content: center;
   align-items: center;
   gap: 20px; /* 그래프와 셀렉트 박스 사이의 간격 */
+
+  /* display: flex; */
+  /* flex-direction: column;  */
+  /* 모든 항목을 수직으로 정렬 */
+  /* align-items: center;  */
+  /* 중앙 정렬 */
+}
+
+.select-draw-container {
+  margin-bottom: 20px; /* 차트와의 간격 */
+  text-align: center; /* 셀렉트 박스 가운데 정렬 */
 }
 
 /* 셀렉트 박스 스타일 */
@@ -276,10 +410,10 @@ h2 {
 /* 기존 스타일에 추가적으로 조정 */
 .table-container {
   width: 100%;
-  margin-top: 20px; /* 셀렉트 박스와의 여백 */
+  overflow-x: auto;
+  margin-top: 20px;
+   /* 셀렉트 박스와의 여백 */
 }
-
-
 
 /* 스크롤바 스타일 (웹킷 기반 브라우저용) */
 .table-container::-webkit-scrollbar {
@@ -298,42 +432,42 @@ h2 {
 
 
 
+/* 통계 테이블 스타일 개선 */
 .stats-table {
-  border: 2px solid #343a40; /* 테이블 전체 테두리를 어두운색으로 변경 */
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: 0; /* 테이블 상단 여백 제거 */
+  width: 100%; /* 테이블 전체 너비 조정 */
+  margin-top: 10px; /* 상단 여백 */
+  border-collapse: collapse; /* 셀 사이 테두리 겹치기 제거 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
 }
 
 .stats-table th, .stats-table td {
-  border-bottom: 2px solid #343a40; /* 행 사이의 가로선을 어두운색으로 변경 */
-  border-right: 2px solid #343a40; /* 열 사이의 세로선을 어두운색으로 변경 */
-  padding: 10px;
-  text-align: left;
-}
-
-.stats-table th:last-child, .stats-table td:last-child {
-  border-right: none; /* 마지막 열의 세로선 제거 */
+  border: 1px solid #a1c4fd; /* 셀 테두리 색상 */
+  padding: 10px; /* 셀 안쪽 여백 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  font-weight: bold; /* 텍스트 볼드 처리 */
+  color: #5a5a5a; /* 텍스트 색상 */
 }
 
 .stats-table th {
-  background-color: #007bff; /* 헤더 배경색 유지 */
-  color: white; /* 헤더 글자색 유지 */
-  font-size: 16px; /* 헤더 글자 크기 유지 */
+  background-color: #a1c4fd; /* 테이블 헤더 배경색 */
+  color: white; /* 테이블 헤더 텍스트 색상 */
 }
 
-.stats-table tr:last-child td {
-  border-bottom: none; /* 마지막 행의 가로선 제거 */
+.stats-table tr:nth-child(even) {
+  background-color: #f8f9fa; /* 짝수 행 배경색 */
 }
 
-.stats-table tbody tr:hover {
-  background-color: #e9ecef; /* 호버 시 배경색 변경 */
+.stats-table tr:hover {
+  background-color: #e6e9fc; /* 행 호버 시 배경색 변경 */
 }
 
-/* 테이블의 첫 번째 열(등수) 스타일 조정 */
-.stats-table td:first-child {
-  font-weight: bold; /* 첫 번째 열 글자 굵게 */
+.stats-table tbody tr:last-child td {
+  border-bottom: 2px solid #a1c4fd; /* 마지막 행의 하단 테두리 강조 */
 }
+
+
+
+
 
 
 .auto-generate-options {

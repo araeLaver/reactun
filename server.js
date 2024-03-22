@@ -95,7 +95,7 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
   try {
     const drawNumber = req.params.drawNumber;
 
-    console.log(' ::drawNumber:: ' + drawNumber);
+    //console.log(' ::drawNumber:: ' + drawNumber);
     // 1. 당첨 번호 및 보너스 번호 가져오기
     const winningNumbersQuery = `SELECT WinningNumbers, BonusNumber FROM LottoWinningNumbers WHERE DrawNumber = ?`;
     // console.log(' ::winningNumbersQuery:: ' + winningNumbersQuery);  

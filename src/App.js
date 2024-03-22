@@ -249,7 +249,7 @@ const generateNumbersWithSpecific = () => {
     //   drawNumber: response.data.drawNumber
     // });
     setLatestStats(response.data);
-console.log('@@response.data@@', response.data);
+// console.log('@@response.data@@', response.data);
 // console.log('@@setLatestStatsa@@', latestStats);
 
   } catch (error) {
@@ -374,6 +374,7 @@ console.log('@@response.data@@', response.data);
     <div className="App">
     
       <header className="App-header">
+        
         {/* <h2>로또 명당</h2>
         <div>다음 회차: {latestStats.drawNumber}</div>
         <div>생성된 번호 수: {latestStats.totalGeneratedNumbers}</div> */}
@@ -461,23 +462,37 @@ console.log('@@response.data@@', response.data);
       <button className="generate-specific-button" onClick={generateNumbersWithSpecific}>특정 번호 포함 생성</button>
     </div>
 
+          
+    <div className="table-container">
+      <table className="table">
+      
+        <thead>
+          <tr>
+            <th>횟수</th>
+            <th>생성번호</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lottoNumbersList.map((numbers, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{numbers}</td>
+            </tr>
+          ))}
+        </tbody>
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th>횟수</th>
-                <th>생성번호</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lottoNumbersList.map((numbers, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{numbers}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      </table>
+    </div>
+
+{/* <tbody>
+  {lottoNumbersList.map((numbers, index) => (
+    <tr key={index}>
+      <td data-label="횟수">{index + 1}</td>
+      <td data-label="생성번호">{numbers}</td>
+    </tr>
+  ))}
+</tbody> */}
+
     
           {/* <button onClick={handleScrapeData} className="button scrape-button">
             Scrape and Save Data
@@ -485,9 +500,7 @@ console.log('@@response.data@@', response.data);
 
         <div className="graph-and-selector-container">
           {/* <div style={{ width: '400px', height: '400px' }}> */}
-          <div className="chart-container">
-            <Doughnut data={chartData} />
-          </div>
+       
           {/* </div> */}
 
           
@@ -505,6 +518,19 @@ console.log('@@response.data@@', response.data);
                     <option key={index} value={number}>{number}회차</option>
                   ))}
               </select>
+
+              <div className="chart-container">
+            <Doughnut data={chartData} />
+
+              {/* <Doughnut
+                data={chartData}
+                options={{
+                  maintainAspectRatio: false, // 차트의 원래 종횡비를 유지하지 않음
+                  responsive: true, // 차트를 반응형으로 설정
+                }}
+                style={{ height: '300px', width: '100%' }} // 컨테이너 크기 조정
+              /> */}
+          </div>
             </div>
         
 
