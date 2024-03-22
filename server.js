@@ -393,6 +393,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 
 // 최신 회차 정보와 총 생성 번호 수 조회 API
 app.get('/api/latest-stats', async (req, res) => {
+  console.log('/api/latest-stats 요청 받음'); 
   try {
     const latestDrawQuery = `
       SELECT DrawNumber, COUNT(*) AS TotalCount 
