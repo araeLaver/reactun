@@ -389,7 +389,7 @@ const generateNumbersWithSpecific = () => {
 
         <h2>로또 명당</h2>
         <p style={{ fontSize: '14px', marginTop: '10px', color: '#666', fontStyle: 'italic' }}>
-          다음 회차: {latestStats.DrawNumber} | 생성된 번호 수: {latestStats.TotalCount}
+          다음 회차: {latestStats.DrawNumber} | 생성된 번호 수(누적): {latestStats.TotalCount}
         </p>
 
         <div className="button-container" style={{ marginBottom: '20px' }}>
