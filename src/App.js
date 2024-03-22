@@ -37,6 +37,8 @@ function App() {
     }
   });
 
+  const [latestStats, setLatestStats] = useState({ TotalCount: 0, DrawNumber: '' });
+
   // useEffect(() => {
   //   // 서버로부터 회차 데이터를 불러오는 함수를 호출
   //   fetchDrawNumbers().then(() => {
@@ -48,6 +50,25 @@ function App() {
   //   });
   // }, [drawNumbers]);
   // // }, []);
+
+  const [autoGenerateActive, setAutoGenerateActive] = useState(false); // 자동 생성 활성화 상태
+  const [generationIntervalId, setGenerationIntervalId] = useState(null); // setInterval ID 저장
+
+  // 특정 번호를 저장할 상태 추가
+  // const [includedNumbers, setIncludedNumbers] = useState('');
+
+  // 특정 번호 입력을 위한 상태
+  const [specificNumbers, setSpecificNumbers] = useState(["", "", "", "", ""]);
+
+  // const [specificNumbers, setSpecificNumbers] = useState(Array(5).fill(''));
+  // const [generatedNumbers, setGeneratedNumbers] = useState([]);
+
+
+
+ // 컴포넌트가 마운트될 때 fetchLatestStats 함수를 호출
+  useEffect(() => {
+    fetchLatestStats();
+  }, []);
 
   useEffect(() => {
     const fetchDrawNumbers = async () => {
@@ -82,7 +103,7 @@ function App() {
 
       
 
-  console.log('@@data@@', data);  
+  // console.log('@@data@@', data);  
           if (data) { // 데이터가 있는지 확인
             setChartData({
               labels: ['1등', '2등', '3등', '4등', '5등'],
@@ -138,6 +159,106 @@ function App() {
   //   }
   // };
 
+  // useEffect(() => {
+  //   // 최신 회차 정보와 총 생성 번호 수를 불러오는 함수
+  //   const fetchLatestStats = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:3000/api/latest-stats');
+  //       // 여기서 response.data는 { DrawNumber: '최신 회차', TotalCount: '총 생성 번호 수' } 형태일 것입니다.
+  //       console.log(response.data);
+  //       // 이 데이터를 상태에 저장하거나 직접 화면에 표시할 수 있습니다.
+  //       // 예: setLatestStats(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching latest stats:', error);
+  //     }
+  //   };
+  
+  //   fetchLatestStats();
+  // }, []);
+  
+
+
+
+
+
+
+// 특정 번호 포함하여 생성하기 함수
+const generateNumbersWithSpecific = () => {
+    
+  //   const includedArray = includedNumbers.split(',')
+  //   .map(num => parseInt(num.trim()))
+  //   .filter(num => !isNaN(num) && num >= 1 && num <= 45)
+  //   .slice(0, 6); // 최대 6개의 번호만 포함
+
+  // let numbers = new Set(includedArray);
+  // while (numbers.size < 6) {
+  //   const number = Math.floor(Math.random() * 45) + 1;
+  //   if (!includedArray.includes(number)) {
+  //     numbers.add(number);
+  //   }
+  // }
+  // const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ');
+
+
+      // 입력된 특정 번호를 검증
+      const includedNumbers = specificNumbers
+      .map(num => parseInt(num, 10))
+      .filter(num => !isNaN(num) && num >= 1 && num <= 45);
+
+    if (includedNumbers.length !== specificNumbers.filter(num => num !== "").length) {
+      alert("입력된 번호가 올바르지 않습니다. 1~45 사이의 숫자를 입력해주세요.");
+      return;
+    }
+
+    let numbers = new Set(includedNumbers);
+    while (numbers.size < 6) {
+      const number = Math.floor(Math.random() * 45) + 1;
+      numbers.add(number);
+    }
+
+    const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ')
+
+
+
+
+  // 여기에서 생성된 번호를 처리하는 로직(예: 상태 업데이트)을 추가...
+  setLottoNumbersList(prevList => [...prevList, newNumbers]);
+  setAllGeneratedNumbers(prevList => [...prevList, newNumbers]);
+
+  const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
+
+    // API를 호출하여 서버에 생성된 번호를 저장
+    axios.post('http://localhost:3000/api/lotto-numbers', {
+      generatedNumbers: newNumbers,
+      generationWeek
+    }).then(response => {
+      console.log('Data inserted successfully', response.data);
+    }).catch(error => {
+      console.error('Error sending data:', error);
+    });
+
+};
+
+
+ // 최신 통계를 가져오는 함수
+ const fetchLatestStats = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/latest-stats');
+    // setLatestStats({
+    //   totalGeneratedNumbers: response.data.totalGeneratedNumbers,
+    //   drawNumber: response.data.drawNumber
+    // });
+    setLatestStats(response.data);
+console.log('@@response.data@@', response.data);
+// console.log('@@setLatestStatsa@@', latestStats);
+
+  } catch (error) {
+    console.error('Error fetching latest stats:', error);
+  }
+};
+
+
+
   const handleDrawNumberChange = (event) => {
     // 선택된 회차에 따른 추가적인 데이터 처리 로직
     setSelectedDrawNumber(event.target.value);
@@ -145,9 +266,9 @@ function App() {
 
   const generateLottoNumbers = () => {
 
-  console.log(' ㅇ__ㅇ '); 
+  // console.log(' ㅇ__ㅇ '); 
     if (clickCount >= 1000) {
-      alert("최대 클릭 수에 도달했습니다."); 
+      alert("최대 생성 수(1000회)에 도달했습니다."); 
       return;
     }
 
@@ -215,6 +336,37 @@ function App() {
   //     .catch(error => console.error(error));
   // };
 
+  // 자동 생성 시작 함수
+  const startAutoGenerate = (count) => {
+    if (autoGenerateActive) return; // 이미 자동 생성 중이면 실행하지 않음
+    setAutoGenerateActive(true);
+    let generatedCount = 0;
+
+    const intervalId = setInterval(() => {
+      generateLottoNumbers();
+      generatedCount += 1;
+
+      if (generatedCount >= count) {
+        clearInterval(intervalId); // 지정된 횟수에 도달하면 중지
+        setAutoGenerateActive(false);
+        setGenerationIntervalId(null);
+      }
+    }, 1000); // 1초 간격으로 생성
+
+    setGenerationIntervalId(intervalId);
+  };
+
+
+  // 자동 생성 중지 함수
+  const stopAutoGenerate = () => {
+    if (generationIntervalId) {
+      clearInterval(generationIntervalId);
+      setAutoGenerateActive(false);
+      setGenerationIntervalId(null);
+    }
+  };
+
+
   const closePopup = () => setAlertVisible(false);
 
   return (
@@ -222,9 +374,22 @@ function App() {
     <div className="App">
     
       <header className="App-header">
+        {/* <h2>로또 명당</h2>
+        <div>다음 회차: {latestStats.drawNumber}</div>
+        <div>생성된 번호 수: {latestStats.totalGeneratedNumbers}</div> */}
+        {/* <div>생성 횟수: {clickCount}</div> */}
+
+        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h2>로또 명당</h2>
+          <p style={{ fontSize: '14px', margin: '0 20px', color: '#666', fontStyle: 'italic' }}>
+            최신 회차: {latestStats.drawNumber} | 생성된 번호 수: {latestStats.totalGeneratedNumbers}
+          </p>
+        </div> */}
+
         <h2>로또 명당</h2>
-    
-        {/* <div>클릭 수: {clickCount}</div> */}
+        <p style={{ fontSize: '14px', marginTop: '10px', color: '#666', fontStyle: 'italic' }}>
+          다음 회차: {latestStats.DrawNumber} | 생성된 번호 수: {latestStats.TotalCount}
+        </p>
 
         <div className="button-container" style={{ marginBottom: '20px' }}>
           <button onClick={generateLottoNumbers} className="button generate-button">
@@ -234,6 +399,23 @@ function App() {
           <button onClick={exportToExcel} className="button export-button">
             엑셀로 내보내기
           </button>
+
+        <div className="auto-generate-options">
+          <button className="auto-generate-option" onClick={() => startAutoGenerate(10)}>10회 자동 생성</button>
+          <button className="auto-generate-option" onClick={() => startAutoGenerate(20)}>20회 자동 생성</button>
+          <button className="auto-generate-option" onClick={() => startAutoGenerate(30)}>30회 자동 생성</button>
+          {/* 필요한 만큼 옵션 추가 */}
+          {/* <button className="auto-generate-stop" onClick={stopAutoGenerate} disabled={!autoGenerateActive}>생성 중지</button> */}
+          <button
+            className={`auto-generate-stop ${autoGenerateActive ? "active" : ""}`}
+            onClick={stopAutoGenerate}
+            disabled={!autoGenerateActive}
+          >
+            생성 중지
+          </button>
+        </div>
+     
+        
         </div>
           {/* {alertVisible && <div>엑셀로 내용 확인 가능합니다</div>} */}
 
@@ -246,6 +428,39 @@ function App() {
               </div>
             </div>
           )}
+
+      {/* 특정 번호 포함 생성 UI */}
+      {/* <div>
+        <input
+          type="text"
+          value={includedNumbers}
+          onChange={(e) => setIncludedNumbers(e.target.value)}
+          placeholder="포함할 번호를 입력하세요 (예: 1,2,3)"
+        />
+        <button onClick={generateNumbersWithSpecific}>특정 번호 포함 생성</button>
+      </div> */}
+
+        {/* 특정 번호 포함 생성 UI */}
+    <div className="specific-numbers-container">
+      {specificNumbers.map((num, index) => (
+        <input
+          key={index}
+          type="number"
+          className="specific-number-input"
+          value={num}
+          onChange={e => {
+            const newSpecificNumbers = [...specificNumbers];
+            newSpecificNumbers[index] = e.target.value;
+            setSpecificNumbers(newSpecificNumbers);
+          }}
+          placeholder={`번호 ${index + 1}`}
+          min="1"
+          max="45"
+        />
+      ))}
+      <button className="generate-specific-button" onClick={generateNumbersWithSpecific}>특정 번호 포함 생성</button>
+    </div>
+
 
           <table className="table">
             <thead>
@@ -280,10 +495,15 @@ function App() {
           <div className="selection-and-table-container">
 
             <div>
-              <select value={selectedDrawNumber} onChange={handleDrawNumberChange} className="draw-number-select">
+              {/* <select value={selectedDrawNumber} onChange={handleDrawNumberChange} className="draw-number-select">
                 {drawNumbers.map((number, index) => (
                   <option key={index} value={number}>{number}회차</option>
                 ))}
+              </select> */}
+              <select value={selectedDrawNumber} onChange={handleDrawNumberChange} className="draw-number-select">
+                  {drawNumbers.filter(number => number !== '1110').map((number, index) => (
+                    <option key={index} value={number}>{number}회차</option>
+                  ))}
               </select>
             </div>
         

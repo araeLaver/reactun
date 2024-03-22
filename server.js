@@ -119,7 +119,7 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 
         const { WinningNumbers, BonusNumber } = winningNumbersResult[0];
         // 이하 로직은 이전과 동일하게 유지
-console.log('@::winningCounts::@' + WinningNumbers + "@::BonusNumber::@" + BonusNumber);
+// console.log('@::winningCounts::@' + WinningNumbers + "@::BonusNumber::@" + BonusNumber);
 
         // 2. 생성된 번호 가져오기
     const generatedNumbersQuery = `SELECT GeneratedNumbers FROM GeneratedNumbers WHERE DrawNumber = ?`;
@@ -272,21 +272,21 @@ const scrapeAndSaveData = async () => {
 
       
 
-      console.log(`회차: ${drawNumber}`);
-      console.log(`추첨일자: ${drawDate}`);
-      console.log(`당첨 번호: ${winningNumbers}`);
-      console.log(`보너스 번호: ${bonusNumber}`);
-      console.log(`총 판매 금액: ${totalSales}`);
-      console.log(`1등 당첨자 수: ${firstPrizeWinners}`);
-      console.log(`1등 당첨금: ${firstPrizeAmount}`);
-      console.log(`2등 당첨자 수: ${secondPrizeWinners}`);
-      console.log(`2등 당첨금: ${secondPrizeAmount}`);
-      console.log(`3등 당첨자 수: ${thirdPrizeWinners}`);
-      console.log(`3등 당첨금: ${thirdPrizeAmount}`);
-      console.log(`4등 당첨자 수: ${fourthPrizeWinners}`);
-      console.log(`4등 당첨금: ${fourthPrizeAmount}`);
-      console.log(`5등 당첨자 수: ${fifthPrizeWinners}`);
-      console.log(`5등 당첨금: ${fifthPrizeAmount}`);
+      // console.log(`회차: ${drawNumber}`);
+      // console.log(`추첨일자: ${drawDate}`);
+      // console.log(`당첨 번호: ${winningNumbers}`);
+      // console.log(`보너스 번호: ${bonusNumber}`);
+      // console.log(`총 판매 금액: ${totalSales}`);
+      // console.log(`1등 당첨자 수: ${firstPrizeWinners}`);
+      // console.log(`1등 당첨금: ${firstPrizeAmount}`);
+      // console.log(`2등 당첨자 수: ${secondPrizeWinners}`);
+      // console.log(`2등 당첨금: ${secondPrizeAmount}`);
+      // console.log(`3등 당첨자 수: ${thirdPrizeWinners}`);
+      // console.log(`3등 당첨금: ${thirdPrizeAmount}`);
+      // console.log(`4등 당첨자 수: ${fourthPrizeWinners}`);
+      // console.log(`4등 당첨금: ${fourthPrizeAmount}`);
+      // console.log(`5등 당첨자 수: ${fifthPrizeWinners}`);
+      // console.log(`5등 당첨금: ${fifthPrizeAmount}`);
 
 
       const generationTime = new Date();
@@ -343,7 +343,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     data.shift(); // 헤더 제거
 
 
-    console.log(" :: data :: " + data);
+    // console.log(" :: data :: " + data);
 
 
     // 데이터베이스에 삽입하기 전에 데이터 처리
@@ -388,6 +388,39 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     res.status(500).send('파일 처리 중 에러 발생');
   }
 });
+
+
+
+// 최신 회차 정보와 총 생성 번호 수 조회 API
+app.get('/api/latest-stats', async (req, res) => {
+  try {
+    const latestDrawQuery = `
+      SELECT DrawNumber, COUNT(*) AS TotalCount 
+      FROM GeneratedNumbers 
+      GROUP BY DrawNumber 
+      ORDER BY DrawNumber DESC 
+      LIMIT 1;
+    `;
+
+    db.query(latestDrawQuery, (error, results) => {
+      if (error) {
+        console.error('Error fetching latest draw stats:', error);
+        return res.status(500).json({ error: 'Error fetching latest draw stats' });
+      }
+
+      // 최신 회차 정보와 총 생성 번호 수 반환
+      if (results.length > 0) {
+        res.json(results[0]);
+      } else {
+        res.status(404).json({ error: 'No data found' });
+      }
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 // 매주 토요일 22시(10PM)에 실행

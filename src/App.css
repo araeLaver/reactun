@@ -335,3 +335,83 @@ h2 {
   font-weight: bold; /* 첫 번째 열 글자 굵게 */
 }
 
+
+.auto-generate-options {
+  display: flex;
+  gap: 10px; /* 버튼 사이의 간격 */
+  margin-top: 20px; /* 상단 여백 */
+  justify-content: center; /* 중앙 정렬 */
+}
+
+.auto-generate-options button {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff; /* 기본 배경색 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.auto-generate-options button:hover {
+  background-color: #0056b3; /* 호버 상태 배경색 */
+}
+
+.auto-generate-options button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* App.css */
+
+/* 특정 번호 포함 생성 UI 스타일 */
+.specific-numbers-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.specific-number-input {
+  width: 60px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.generate-specific-button {
+  padding: 10px 15px;
+  background-color: #4CAF50; /* 녹색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.generate-specific-button:hover {
+  background-color: #45a049;
+}
+
+.auto-generate-stop {
+  /* 기본 버튼 스타일 */
+  background-color: #007bff; /* 기본 파란색 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.auto-generate-stop:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.auto-generate-stop.active {
+  background-color: #ff4747; /* 생성 중일 때 빨간색 */
+}
