@@ -128,15 +128,15 @@ function App() {
 
   }, [selectedDrawNumber]);
 
-  const fetchDrawNumbers = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/weeks');
-      setDrawNumbers(response.data); // 가정: response.data는 회차 번호의 배열
-      // setSelectedDrawNumber(response.data[0]); // 첫 번째 회차를 기본값으로 설정
-    } catch (error) {
-      console.error('Error fetching draw numbers:', error);
-    }
-  };
+  // const fetchDrawNumbers = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:3000/api/weeks');
+  //     setDrawNumbers(response.data); // 가정: response.data는 회차 번호의 배열
+  //     // setSelectedDrawNumber(response.data[0]); // 첫 번째 회차를 기본값으로 설정
+  //   } catch (error) {
+  //     console.error('Error fetching draw numbers:', error);
+  //   }
+  // };
 
   const handleDrawNumberChange = (event) => {
     // 선택된 회차에 따른 추가적인 데이터 처리 로직
@@ -222,7 +222,7 @@ function App() {
     <div className="App">
     
       <header className="App-header">
-        <h2>.</h2>
+        <h2>로또 명당</h2>
     
         {/* <div>클릭 수: {clickCount}</div> */}
 
