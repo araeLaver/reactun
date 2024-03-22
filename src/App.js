@@ -73,7 +73,7 @@ function App() {
   useEffect(() => {
     const fetchDrawNumbers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/weeks');
+        const response = await axios.get('http://localhost:3001/api/weeks');
         setDrawNumbers(response.data);
         if (response.data.length > 0) {
           const latestDrawNumber = response.data[0]; // 가장 최근 회차
@@ -97,7 +97,7 @@ function App() {
     // fetchDrawNumbers();
     // console.log('selectedDrawNumber', selectedDrawNumber);
     if (selectedDrawNumber) {
-      axios.get(`http://localhost:3000/api/lotto-stats/${selectedDrawNumber}`)
+      axios.get(`http://localhost:3001/api/lotto-stats/${selectedDrawNumber}`)
         .then(response => {
           const { data } = response;
 
@@ -151,7 +151,7 @@ function App() {
 
   // const fetchDrawNumbers = async () => {
   //   try {
-  //     const response = await axios.get('http://localhost:3000/api/weeks');
+  //     const response = await axios.get('http://localhost:3001/api/weeks');
   //     setDrawNumbers(response.data); // 가정: response.data는 회차 번호의 배열
   //     // setSelectedDrawNumber(response.data[0]); // 첫 번째 회차를 기본값으로 설정
   //   } catch (error) {
@@ -163,7 +163,7 @@ function App() {
   //   // 최신 회차 정보와 총 생성 번호 수를 불러오는 함수
   //   const fetchLatestStats = async () => {
   //     try {
-  //       const response = await axios.get('http://localhost:3000/api/latest-stats');
+  //       const response = await axios.get('http://localhost:3001/api/latest-stats');
   //       // 여기서 response.data는 { DrawNumber: '최신 회차', TotalCount: '총 생성 번호 수' } 형태일 것입니다.
   //       console.log(response.data);
   //       // 이 데이터를 상태에 저장하거나 직접 화면에 표시할 수 있습니다.
@@ -228,7 +228,7 @@ const generateNumbersWithSpecific = () => {
   const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
 
     // API를 호출하여 서버에 생성된 번호를 저장
-    axios.post('http://localhost:3000/api/lotto-numbers', {
+    axios.post('http://localhost:3001/api/lotto-numbers', {
       generatedNumbers: newNumbers,
       generationWeek
     }).then(response => {
@@ -243,7 +243,7 @@ const generateNumbersWithSpecific = () => {
  // 최신 통계를 가져오는 함수
  const fetchLatestStats = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/latest-stats');
+    const response = await axios.get('http://localhost:3001/api/latest-stats');
     // setLatestStats({
     //   totalGeneratedNumbers: response.data.totalGeneratedNumbers,
     //   drawNumber: response.data.drawNumber
@@ -280,7 +280,7 @@ const generateNumbersWithSpecific = () => {
     const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ');
     const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
 
-    axios.post('http://localhost:3000/api/lotto-numbers', { generatedNumbers: newNumbers,generationWeek })
+    axios.post('http://localhost:3001/api/lotto-numbers', { generatedNumbers: newNumbers,generationWeek })
     .then(response => {
       console.log('Data inserted successfully', response.data);
     })
@@ -314,7 +314,7 @@ const generateNumbersWithSpecific = () => {
   };
 
   // const handleScrapeData = () => {
-  //   axios.get('http://localhost:3000/scrape')
+  //   axios.get('http://localhost:3001/scrape')
   //     .then(response => {
   //       console.log(response.data);
   //       alert('Data scraping and saving process is completed.');
