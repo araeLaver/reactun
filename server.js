@@ -212,7 +212,7 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 // 클릭 생성기에서 생성된 로또 번호를 저장하는 API
 app.post('/api/lotto-numbers', (req, res) => {
   // const { generatedNumbers, generationWeek } = req.body;
-  const generationTime = new Date();
+  const generationTime = new Date('2024-03-09T20:00:00Z');
   const { generatedNumbers, generationWeek } = req.body; // 생성된 번호 및 생성 주차
   const drawNumber = getCurrentDrawNumber(); // 현재 회차 계산
   
