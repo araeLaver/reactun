@@ -16,7 +16,7 @@ const port = 3001; // Express 서버의 포트 번호를 MySQL 기본 포트와 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 app.use(cors({
-  origin: 'https://reactun-untab.koyeb.app/'
+  origin: 'https://reactun-untab.koyeb.app'
 }));
 app.use(bodyParser.json());
 
