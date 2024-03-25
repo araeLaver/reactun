@@ -12,7 +12,8 @@ const xlsx = require('xlsx');
 
 
 const app = express();
-const port = process.env.PORT || 3001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
+const port = process.env.PORT || 8000; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
+console.log(' ::port:: ' + port + "::" + process.env.PORT);
 // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
