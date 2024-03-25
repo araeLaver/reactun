@@ -12,14 +12,19 @@ const xlsx = require('xlsx');
 
 
 const app = express();
-const port = 3001; // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
+const port = process.env.PORT || 3001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
+// Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
-app.use(cors(
+// app.use(cors(
   // {
   // origin: 'https://reactun-untab.koyeb.app'
   // }
-));
+// ));
+
+// const cors = require('cors');
+app.use(cors()); // 모든 도메인에 대해 요청을 허용
+
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
