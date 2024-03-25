@@ -12,16 +12,11 @@ const xlsx = require('xlsx');
 
 
 const app = express();
-const port = process.env.PORT || 8000; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
-console.log(' ::port:: ' + port + "::" + process.env.PORT);
+const port = 3001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
 // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
-// app.use(cors(
-  // {
-  // origin: 'https://reactun-untab.koyeb.app'
-  // }
-// ));
+
 
 // const cors = require('cors');
 app.use(cors()); // 모든 도메인에 대해 요청을 허용
@@ -61,8 +56,8 @@ app.get('/api/weeks', (req, res) => {
 // console.log(' ::weeks value:: ');
   // 여기서는 'LottoWinningNumbers' 테이블에서 회차 정보('DrawNumber')를 조회합니다.
   const query = 'SELECT DISTINCT DrawNumber FROM LottoWinningNumbers ORDER BY DrawNumber DESC';
-
-  // console.log(' ::req.params1:: ' + req);
+  console.log("ㅇ_ㅇ")
+//  console.log(' ::req.params1:: ' + req);
 // console.log(' ::err:: ' + err);
 // console.log(' ::results:: ' + results);
 
