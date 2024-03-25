@@ -8,6 +8,10 @@ import './App.css';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
+// const dev = require('dotenv').config();
+// const apiUrl = process.env.API_URL;
+// const apiPort = process.env.API_PORT;
+
 function App() {
 
   const [lottoNumbersList, setLottoNumbersList] = useState([]);
@@ -74,6 +78,9 @@ function App() {
     const fetchDrawNumbers = async () => {
       try {
         const response = await axios.get('https://reactun-untab.koyeb.app/api/weeks');
+    // console.log('@@dev@@', dev);
+    // console.log('@@apiUrl@@', apiUrl);
+    // console.log('@@apiPort@@', apiPort);
         setDrawNumbers(response.data);
         if (response.data.length > 0) {
           const latestDrawNumber = response.data[0]; // 가장 최근 회차
