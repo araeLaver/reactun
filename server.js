@@ -56,7 +56,7 @@ app.get('/api/weeks', (req, res) => {
 // console.log(' ::weeks value:: ');
   // 여기서는 'LottoWinningNumbers' 테이블에서 회차 정보('DrawNumber')를 조회합니다.
   const query = 'SELECT DISTINCT DrawNumber FROM LottoWinningNumbers ORDER BY DrawNumber DESC';
-  console.log("ㅇ_ㅇ")
+//  console.log("ㅇ_ㅇ")
 //  console.log(' ::req.params1:: ' + req);
 // console.log(' ::err:: ' + err);
 // console.log(' ::results:: ' + results);
@@ -214,7 +214,7 @@ app.post('/api/lotto-numbers', (req, res) => {
   // const { generatedNumbers, generationWeek } = req.body;
   const now = new Date();
   const generationTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC 시간에 9시간 추가
-  console.log(' ::generationTime :: ' + generationTime );
+  // console.log(' ::generationTime :: ' + generationTime );
   const { generatedNumbers, generationWeek } = req.body; // 생성된 번호 및 생성 주차
   const drawNumber = getCurrentDrawNumber(); // 현재 회차 계산
   
@@ -400,7 +400,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 
 // 최신 회차 정보와 총 생성 번호 수 조회 API
 app.get('/api/latest-stats', async (req, res) => {
-  console.log('/api/latest-stats 요청 받음'); 
+  console.log('요청 체크'); 
   try {
     const latestDrawQuery = `
       SELECT DrawNumber, COUNT(*) AS TotalCount 
