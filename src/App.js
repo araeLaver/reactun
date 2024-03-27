@@ -134,16 +134,34 @@ function calculateAnnouncementDate(selectedDrawNumber) {
       axios.get(`https://reactun-untab.koyeb.app/api/lotto-stats/${selectedDrawNumber}`)
         .then(response => {
           const { data } = response;
-
+          // const data = response.data;
   // console.log('@@data@@', data);  
+
+         // 각 등수별 생성된 번호의 개수
+         const counts = {
+          first: data.firstMatchedNumbers,
+          second: data.secondMatchedNumbers,
+          third: data.thirdMatchedNumbers,
+          fourth: data.fourthMatchedNumbers,
+          fifth: data.fifthMatchedNumbers
+        };
+
+        // 총 생성된 번호의 개수 계산
+        const totalCount = Object.values(counts).reduce((acc, count) => acc + count, 0);
+
+      // 비율 계산 (100% 기준) 및 소수점 두 자리로 반올림
+      const rates = Object.keys(counts).map(key => parseFloat(((counts[key] / totalCount) * 100).toFixed(2)));
+
+
           if (data) { // 데이터가 있는지 확인
             setChartData({
               labels: ['1등', '2등', '3등', '4등', '5등'],
               datasets: [{
                 label: '당첨 비율',
-                data: [data.first, data.second, data.third, data.fourth, data.fifth].map(
-                  item => item || 0 // 데이터가 undefined일 경우 0으로 설정
-                ),
+                // data: [data.first, data.second, data.third, data.fourth, data.fifth].map(
+                //   item => item || 0 // 데이터가 undefined일 경우 0으로 설정
+                // ),
+                data: rates,
                 backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(54, 162, 235, 0.2)',
