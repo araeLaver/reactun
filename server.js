@@ -48,6 +48,20 @@ db.connect(err => {
 // });
 
 
+// 총 누적 카운트 조회 API
+app.get('/api/total-generated-count', (req, res) => {
+  const query = 'SELECT COUNT(*) AS totalGeneratedCount FROM GeneratedNumbers';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching total generated count:', err);
+      res.status(500).send('Error fetching total generated count');
+      return;
+    }
+    // 결과의 첫 번째 행에서 totalGeneratedCount 값을 추출하여 반환
+    const totalGeneratedCount = results[0].totalGeneratedCount;
+    res.json({ totalGeneratedCount });
+  });
+});
 
 
 // 회차별 데이터 조회 API

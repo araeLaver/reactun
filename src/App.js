@@ -16,13 +16,42 @@ function App() {
 
   const [lottoNumbersList, setLottoNumbersList] = useState([]);
   const [allGeneratedNumbers, setAllGeneratedNumbers] = useState([]);
-
   const [clickCount, setClickCount] = useState(0);
   const [alertVisible, setAlertVisible] = useState(false);
-
   const [drawNumbers, setDrawNumbers] = useState([]);
   const [selectedDrawNumber, setSelectedDrawNumber] = useState('');
-  
+  const [latestStats, setLatestStats] = useState({ TotalCount: 0, DrawNumber: '' });
+  // 자동 생성 활성화 상태
+  const [autoGenerateActive, setAutoGenerateActive] = useState(false); 
+  // setInterval ID 저장
+  const [generationIntervalId, setGenerationIntervalId] = useState(null); 
+ // 특정 번호 입력을 위한 상태
+ const [specificNumbers, setSpecificNumbers] = useState(["", "", "", "", ""]);
+
+ const [isLoading, setIsLoading] = useState(false);
+//  const [isExpanded, setIsExpanded] = useState(false);
+
+//  총카운트
+const [totalGeneratedCount, setTotalGeneratedCount] = useState(0);
+
+// 추첨일 추가
+const [announcementDate, setAnnouncementDate] = useState('');
+// 발표일 계산 함수
+function calculateAnnouncementDate(selectedDrawNumber) {
+  const baseDrawNumber = 1113; // 기준 회차
+  const baseAnnouncementDate = new Date('2024-04-06'); // 해당 회차의 발표일
+  const selectedDraw = parseInt(selectedDrawNumber, 10);
+// console.log('@@baseAnnouncementDate@@', baseAnnouncementDate);
+// console.log('@@selectedDraw@@', selectedDraw);
+  // 선택된 회차와 기준 회차 사이의 차이를 주 단위로 계산
+  const weeksDifference = selectedDraw - baseDrawNumber;
+
+  // 기준 발표일로부터 차이만큼 주를 더해 새로운 발표일 계산
+  const announcementDate = new Date(baseAnnouncementDate);
+  announcementDate.setDate(announcementDate.getDate() + weeksDifference * 7);
+
+  return announcementDate.toISOString().slice(0, 10); // YYYY-MM-DD 형식으로 반환
+}
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -41,32 +70,33 @@ function App() {
     }
   });
 
-  const [latestStats, setLatestStats] = useState({ TotalCount: 0, DrawNumber: '' });
-
-  // useEffect(() => {
-  //   // 서버로부터 회차 데이터를 불러오는 함수를 호출
-  //   fetchDrawNumbers().then(() => {
-  //       if (drawNumbers.length > 0) {
-  //      // 첫 번째 회차를 선택합니다. (이 부분은 비동기적으로 drawNumbers가 설정된 후에 실행되어야 합니다.)
-  //       setSelectedDrawNumber(drawNumbers[0]);
-  //     }
-      
-  //   });
-  // }, [drawNumbers]);
-  // // }, []);
-
-  const [autoGenerateActive, setAutoGenerateActive] = useState(false); // 자동 생성 활성화 상태
-  const [generationIntervalId, setGenerationIntervalId] = useState(null); // setInterval ID 저장
-
   // 특정 번호를 저장할 상태 추가
   // const [includedNumbers, setIncludedNumbers] = useState('');
 
-  // 특정 번호 입력을 위한 상태
-  const [specificNumbers, setSpecificNumbers] = useState(["", "", "", "", ""]);
 
-  // const [specificNumbers, setSpecificNumbers] = useState(Array(5).fill(''));
-  // const [generatedNumbers, setGeneratedNumbers] = useState([]);
+  useEffect(() => {
+    const fetchTotalGeneratedCount = async () => {
+      try {
+        const response = await axios.get('https://reactun-untab.koyeb.app/api/total-generated-count');
+        setTotalGeneratedCount(response.data.totalGeneratedCount);
+      } catch (error) {
+        console.error('Error fetching total generated count:', error);
+      }
+    };
+  
+    fetchTotalGeneratedCount();
+  }, []);
 
+  // 추첨일 계산 함수
+  useEffect(() => {
+    if (selectedDrawNumber) {
+      const newAnnouncementDate = calculateAnnouncementDate(selectedDrawNumber);
+      // 계산된 발표일을 상태에 저장하거나 직접 사용
+      // console.log(newAnnouncementDate); // 예: '2024-04-06' (선택된 회차에 따라 달라짐)
+      // 여기서는 상태에 저장하거나, 직접 DOM에 반영하는 로직을 추가합니다.
+      setAnnouncementDate(newAnnouncementDate); // 계산된 발표일을 상태에 저장
+    }
+  }, [selectedDrawNumber]); // 선택된 회차가 변경될 때마다 발표일 다시 계산
 
 
  // 컴포넌트가 마운트될 때 fetchLatestStats 함수를 호출
@@ -78,9 +108,6 @@ function App() {
     const fetchDrawNumbers = async () => {
       try {
         const response = await axios.get('https://reactun-untab.koyeb.app/api/weeks');
-    // console.log('@@dev@@', dev);
-    // console.log('@@apiUrl@@', apiUrl);
-    // console.log('@@apiPort@@', apiPort);
         setDrawNumbers(response.data);
         if (response.data.length > 0) {
           const latestDrawNumber = response.data[0]; // 가장 최근 회차
@@ -107,8 +134,6 @@ function App() {
       axios.get(`https://reactun-untab.koyeb.app/api/lotto-stats/${selectedDrawNumber}`)
         .then(response => {
           const { data } = response;
-
-      
 
   // console.log('@@data@@', data);  
           if (data) { // 데이터가 있는지 확인
@@ -156,115 +181,55 @@ function App() {
 
   }, [selectedDrawNumber]);
 
-  // const fetchDrawNumbers = async () => {
-  //   try {
-  //     const response = await axios.get('http://localhostuntab.koyeb.app:3001/api/weeks');
-  //     setDrawNumbers(response.data); // 가정: response.data는 회차 번호의 배열
-  //     // setSelectedDrawNumber(response.data[0]); // 첫 번째 회차를 기본값으로 설정
-  //   } catch (error) {
-  //     console.error('Error fetching draw numbers:', error);
-  //   }
-  // };
 
-  // useEffect(() => {
-  //   // 최신 회차 정보와 총 생성 번호 수를 불러오는 함수
-  //   const fetchLatestStats = async () => {
-  //     try {
-  //       const response = await axios.get('https://reactun-untab.koyeb.app/api/latest-stats');
-  //       // 여기서 response.data는 { DrawNumber: '최신 회차', TotalCount: '총 생성 번호 수' } 형태일 것입니다.
-  //       console.log(response.data);
-  //       // 이 데이터를 상태에 저장하거나 직접 화면에 표시할 수 있습니다.
-  //       // 예: setLatestStats(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching latest stats:', error);
-  //     }
-  //   };
-  
-  //   fetchLatestStats();
-  // }, []);
-  
-
-
-
-
-
-
-// 특정 번호 포함하여 생성하기 함수
-const generateNumbersWithSpecific = () => {
-    
-  //   const includedArray = includedNumbers.split(',')
-  //   .map(num => parseInt(num.trim()))
-  //   .filter(num => !isNaN(num) && num >= 1 && num <= 45)
-  //   .slice(0, 6); // 최대 6개의 번호만 포함
-
-  // let numbers = new Set(includedArray);
-  // while (numbers.size < 6) {
-  //   const number = Math.floor(Math.random() * 45) + 1;
-  //   if (!includedArray.includes(number)) {
-  //     numbers.add(number);
-  //   }
-  // }
-  // const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ');
-
-
+  // 특정 번호 포함하여 생성하기 함수
+  const generateNumbersWithSpecific = () => {
+      
       // 입력된 특정 번호를 검증
       const includedNumbers = specificNumbers
       .map(num => parseInt(num, 10))
       .filter(num => !isNaN(num) && num >= 1 && num <= 45);
 
-    if (includedNumbers.length !== specificNumbers.filter(num => num !== "").length) {
-      alert("입력된 번호가 올바르지 않습니다. 1~45 사이의 숫자를 입력해주세요.");
-      return;
+      if (includedNumbers.length !== specificNumbers.filter(num => num !== "").length) {
+        alert("입력된 번호가 올바르지 않습니다. 1~45 사이의 숫자를 입력해주세요.");
+        return;
+      }
+
+      let numbers = new Set(includedNumbers);
+      while (numbers.size < 6) {
+        const number = Math.floor(Math.random() * 45) + 1;
+        numbers.add(number);
+      }
+
+      const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ')
+
+    // 여기에서 생성된 번호를 처리하는 로직(예: 상태 업데이트)을 추가...
+    setLottoNumbersList(prevList => [...prevList, newNumbers]);
+    setAllGeneratedNumbers(prevList => [...prevList, newNumbers]);
+
+    const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
+
+      // API를 호출하여 서버에 생성된 번호를 저장
+      axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', {
+        generatedNumbers: newNumbers,
+        generationWeek
+      }).then(response => {
+        console.log('Data inserted successfully', response.data);
+      }).catch(error => {
+        console.error('Error sending data:', error);
+      });
+
+  };
+
+  // 최신 통계를 가져오는 함수
+  const fetchLatestStats = async () => {
+    try {
+      const response = await axios.get('https://reactun-untab.koyeb.app/api/latest-stats');
+      setLatestStats(response.data);
+    } catch (error) {
+      console.error('Error fetching latest stats:', error);
     }
-
-    let numbers = new Set(includedNumbers);
-    while (numbers.size < 6) {
-      const number = Math.floor(Math.random() * 45) + 1;
-      numbers.add(number);
-    }
-
-    const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ')
-
-
-
-
-  // 여기에서 생성된 번호를 처리하는 로직(예: 상태 업데이트)을 추가...
-  setLottoNumbersList(prevList => [...prevList, newNumbers]);
-  setAllGeneratedNumbers(prevList => [...prevList, newNumbers]);
-
-  const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
-
-    // API를 호출하여 서버에 생성된 번호를 저장
-    axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', {
-      generatedNumbers: newNumbers,
-      generationWeek
-    }).then(response => {
-      console.log('Data inserted successfully', response.data);
-    }).catch(error => {
-      console.error('Error sending data:', error);
-    });
-
-};
-
-
- // 최신 통계를 가져오는 함수
- const fetchLatestStats = async () => {
-  try {
-    const response = await axios.get('https://reactun-untab.koyeb.app/api/latest-stats');
-    // setLatestStats({
-    //   totalGeneratedNumbers: response.data.totalGeneratedNumbers,
-    //   drawNumber: response.data.drawNumber
-    // });
-    setLatestStats(response.data);
-//  console.log('@@response.data@@', response.data);
-// console.log('@@setLatestStatsa@@', latestStats);
-
-  } catch (error) {
-    console.error('Error fetching latest stats:', error);
-  }
-};
-
-
+  };
 
   const handleDrawNumberChange = (event) => {
     // 선택된 회차에 따른 추가적인 데이터 처리 로직
@@ -305,7 +270,6 @@ const generateNumbersWithSpecific = () => {
         setLottoNumbersList([]);
       }
   };
-  
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
@@ -320,33 +284,13 @@ const generateNumbersWithSpecific = () => {
     XLSX.writeFile(workbook, `lotto_numbers_${new Date().toISOString()}.xlsx`);
   };
 
-  // const handleScrapeData = () => {
-  //   axios.get('https://reactun-untab.koyeb.app/scrape')
-  //     .then(response => {
-  //       console.log(response.data);
-  //       alert('Data scraping and saving process is completed.');
-  //     })
-  //     .catch(error => {
-  //       console.error('Error during scraping:', error);
-  //       alert('Failed to scrape data.');
-  //     });
-  // };
-
-  // 파일 업로드 컴포넌트
-  // const handleFileUpload = (event) => {
-  //   const file = event.target.files[0];
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-
-  //   axios.post('https://reactun-untab.koyeb.app/api/upload', formData)
-  //     .then(response => console.log(response.data))
-  //     .catch(error => console.error(error));
-  // };
-
   // 자동 생성 시작 함수
   const startAutoGenerate = (count) => {
     if (autoGenerateActive) return; // 이미 자동 생성 중이면 실행하지 않음
     setAutoGenerateActive(true);
+
+    setIsLoading(true); // 로딩 시작
+
     let generatedCount = 0;
 
     const intervalId = setInterval(() => {
@@ -355,10 +299,13 @@ const generateNumbersWithSpecific = () => {
 
       if (generatedCount >= count) {
         clearInterval(intervalId); // 지정된 횟수에 도달하면 중지
+
+        setIsLoading(false); // 로딩 종료
+        
         setAutoGenerateActive(false);
         setGenerationIntervalId(null);
       }
-    }, 1000); // 1초 간격으로 생성
+    }, 300); // 1초(1000) 간격으로 생성
 
     setGenerationIntervalId(intervalId);
   };
@@ -373,9 +320,8 @@ const generateNumbersWithSpecific = () => {
     }
   };
 
-
   const closePopup = () => setAlertVisible(false);
-
+ 
   return (
 
     <div className="App">
@@ -396,7 +342,11 @@ const generateNumbersWithSpecific = () => {
 
         <h2>로또 명당</h2>
         <p style={{ fontSize: '14px', marginTop: '10px', color: '#666', fontStyle: 'italic' }}>
-          다음 회차: {latestStats.DrawNumber} | 생성된 번호 수(누적): {latestStats.TotalCount}
+          {/* 다음 회차: {latestStats.DrawNumber} | 생성된 번호 수(누적): {latestStats.TotalCount} */}
+          다음 회차: {latestStats.DrawNumber} | 추첨일: {announcementDate} | 생성된 번호 수: {latestStats.TotalCount}
+        </p>
+        <p style={{ fontSize: '14px', color: '#666', fontStyle: 'italic' }}>
+          생성 총 카운트(누적): {totalGeneratedCount}
         </p>
 
         <div className="button-container" style={{ marginBottom: '20px' }}>
@@ -469,57 +419,72 @@ const generateNumbersWithSpecific = () => {
       <button className="generate-specific-button" onClick={generateNumbersWithSpecific}>특정 번호 포함 생성</button>
     </div>
 
-          
+    {/* <button onClick={() => setIsExpanded(!isExpanded)}>
+      {isExpanded ? '접기' : '펼치기'}
+    </button> */}
+
+
+
     <div className="table-container">
+
+    {/* {isLoading && (
+        <div className="loading-bar-container">
+            <div className="loading-bar"></div>
+        </div>
+        )} */}
+
+<div className="loading-bar-container">
+    {isLoading && <div className="loading-bar"></div>}
+</div>
+
+
       <table className="table">
-      
+
         <thead>
           <tr>
             <th>횟수</th>
             <th>생성번호</th>
           </tr>
         </thead>
+
         <tbody>
+
           {lottoNumbersList.map((numbers, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{numbers}</td>
             </tr>
           ))}
+
+          {/* {isLoading && <div>로딩 중...</div>}
+
+          {isExpanded ? (
+              lottoNumbersList.map((numbers, index) => (
+                  <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{numbers}</td>
+                  </tr>
+              ))
+          ) : (
+              lottoNumbersList.slice(0, 5).map((numbers, index) => (
+                  <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{numbers}</td>
+                  </tr>
+              ))
+          )} */}
+
         </tbody>
 
       </table>
+ 
     </div>
 
-{/* <tbody>
-  {lottoNumbersList.map((numbers, index) => (
-    <tr key={index}>
-      <td data-label="횟수">{index + 1}</td>
-      <td data-label="생성번호">{numbers}</td>
-    </tr>
-  ))}
-</tbody> */}
-
-    
-          {/* <button onClick={handleScrapeData} className="button scrape-button">
-            Scrape and Save Data
-          </button> */}
-
         <div className="graph-and-selector-container">
-          {/* <div style={{ width: '400px', height: '400px' }}> */}
-       
-          {/* </div> */}
-
-          
           {/* 셀렉트 박스와 테이블을 포함하는 컨테이너 */}
           <div className="selection-and-table-container">
 
             <div>
-              {/* <select value={selectedDrawNumber} onChange={handleDrawNumberChange} className="draw-number-select">
-                {drawNumbers.map((number, index) => (
-                  <option key={index} value={number}>{number}회차</option>
-                ))}
-              </select> */}
               <select value={selectedDrawNumber} onChange={handleDrawNumberChange} className="draw-number-select">
                   {drawNumbers.filter(number => number !== '1110').map((number, index) => (
                     <option key={index} value={number}>{number}회차</option>
@@ -540,8 +505,6 @@ const generateNumbersWithSpecific = () => {
           </div>
             </div>
         
-
-
             <div className="table-container">
               <table className="stats-table">
                 <thead>

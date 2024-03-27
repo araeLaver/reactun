@@ -549,3 +549,35 @@ h2 {
 .auto-generate-stop.active {
   background-color: #ff4747; /* 생성 중일 때 빨간색 */
 }
+
+
+/* App.css */
+.loading-bar-container {
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar {
+  width: 40%; /* 길이 조정 */
+  height: 20px; /* 바의 높이를 두껍게 조정 */
+  border-radius: 10px;
+  background: linear-gradient(270deg, #89CFF0, #FFC0CB, #FDFD96); /* 파스텔 색상 적용 */
+  background-size: 600% 600%; /* 속도 조정을 위해 배경 크기 조정 */
+  position: relative;
+  animation: loadingAnimation 4s ease infinite; /* 애니메이션 속도 조정 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 약화 */
+}
+
+@keyframes loadingAnimation {
+    0% {
+      background-position: 100% 0;
+  }
+  100% {
+      background-position: -100% 0;
+  }
+}
