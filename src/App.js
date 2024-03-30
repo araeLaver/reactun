@@ -41,9 +41,10 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   const baseDrawNumber = 1113; // 기준 회차
   const baseAnnouncementDate = new Date('2024-04-06'); // 해당 회차의 발표일
   const selectedDraw = parseInt(selectedDrawNumber, 10);
+
 // console.log('@@baseAnnouncementDate@@', baseAnnouncementDate);
 // console.log('@@selectedDraw@@', selectedDraw);
-  // 선택된 회차와 기준 회차 사이의 차이를 주 단위로 계산
+// 선택된 회차와 기준 회차 사이의 차이를 주 단위로 계산
   const weeksDifference = selectedDraw - baseDrawNumber;
 
   // 기준 발표일로부터 차이만큼 주를 더해 새로운 발표일 계산
@@ -338,6 +339,16 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     }
   };
 
+  const handleScrapeAndSaveData = async () => {
+    try {
+      await axios.get('https://reactun-untab.koyeb.app/scrape');
+      alert('데이터 스크래핑 및 저장이 완료되었습니다.');
+    } catch (error) {
+      console.error('데이터 스크래핑 및 저장 중 오류가 발생했습니다:', error);
+      alert('데이터 스크래핑 및 저장 중 오류가 발생했습니다.');
+    }
+  };
+
   const closePopup = () => setAlertVisible(false);
  
   return (
@@ -375,6 +386,10 @@ function calculateAnnouncementDate(selectedDrawNumber) {
           <button onClick={exportToExcel} className="button export-button">
             엑셀로 내보내기
           </button>
+
+        {/* <button onClick={handleScrapeAndSaveData} className="button scrape-button">
+          데이터 스크래핑 및 저장
+        </button> */}
 
         <div className="auto-generate-options">
           <button className="auto-generate-option" onClick={() => startAutoGenerate(10)}>10회 자동 생성</button>

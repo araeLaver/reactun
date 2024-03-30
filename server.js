@@ -213,9 +213,6 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 
     });
      
-     
-    
-
   } catch (error) {
     console.error('Error calculating winning rates:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -444,20 +441,14 @@ app.get('/api/latest-stats', async (req, res) => {
 });
 
 
-
 // 매주 토요일 22시(10PM)에 실행
 // 한국 시간대 기준으로 오후 10시(22시)에 실행하려면 UTC 시간대에서는 오후 1시(13시) 00분에 설정
 // 9 시간 차이
 // cron.schedule('00 22 * * 6', () => {
-cron.schedule('01 14 * * 6', () => {
+cron.schedule('00 13 * * 6', () => {
   console.log('Running a task every Saturday at 21:00');
   scrapeAndSaveData();
 });
-
-
-
-
-
 
 function formatDate(dateStr) {
   const parts = dateStr.match(/(\d{4})년 (\d{2})월 (\d{2})일/);
@@ -473,7 +464,7 @@ function formatDate(dateStr) {
 function getCurrentDrawNumber() {
   const startDrawNumber = 1111; // 시작 회차
   const startDateTime = new Date('2024-03-09T20:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
-
+// console.log('startDateTime' + startDateTime)
   // 현재 날짜 및 시간 (UTC 기준으로 조정 필요 시 조정)
   const now = new Date();
 
@@ -484,7 +475,8 @@ function getCurrentDrawNumber() {
   const diff = now - startDateTime;
 
   // 차이를 주 단위로 환산 후, 시작 회차에 더해 현재 회차 계산
-  const currentDrawNumber = startDrawNumber + Math.floor(diff / oneWeekMilliseconds);
+  const currentDrawNumber = 1114
+  //startDrawNumber + Math.floor(diff / oneWeekMilliseconds);
 
   return currentDrawNumber;
 }
