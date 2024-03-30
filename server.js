@@ -446,7 +446,7 @@ app.get('/api/latest-stats', async (req, res) => {
 
 
 // 매주 토요일 22시(10PM)에 실행
-cron.schedule('0 22 * * 6', () => {
+cron.schedule('30 21 * * 6', () => {
   console.log('Running a task every Saturday at 22:00');
   scrapeAndSaveData();
 });
