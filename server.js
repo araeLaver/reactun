@@ -446,8 +446,11 @@ app.get('/api/latest-stats', async (req, res) => {
 
 
 // 매주 토요일 22시(10PM)에 실행
-cron.schedule('30 21 * * 6', () => {
-  console.log('Running a task every Saturday at 22:00');
+// 한국 시간대 기준으로 오후 10시(22시)에 실행하려면 UTC 시간대에서는 오후 1시(13시) 00분에 설정
+// 9 시간 차이
+// cron.schedule('30 21 * * 6', () => {
+cron.schedule('40 12 * * 6', () => {
+  console.log('Running a task every Saturday at 21:30');
   scrapeAndSaveData();
 });
 
