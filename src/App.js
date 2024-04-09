@@ -100,7 +100,7 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   }, [selectedDrawNumber]); // 선택된 회차가 변경될 때마다 발표일 다시 계산
 
 
- // 컴포넌트가 마운트될 때 fetchLatestStats 함수를 호출
+ // 컴포넌트가 마운트될 때 fetchLatestStats 함수를 호출//
   useEffect(() => {
     fetchLatestStats();
   }, []);
