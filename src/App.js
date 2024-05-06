@@ -92,7 +92,7 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   useEffect(() => {
     if (selectedDrawNumber) {
       const newAnnouncementDate = calculateAnnouncementDate(selectedDrawNumber);
-      // 계산된 발표일을 상태에 저장하거나 직접 사용
+      // 계산된 발표일을 상태에 저장하거나 직접 사용  
       // console.log(newAnnouncementDate); // 예: '2024-04-06' (선택된 회차에 따라 달라짐)
       // 여기서는 상태에 저장하거나, 직접 DOM에 반영하는 로직을 추가합니다.
       setAnnouncementDate(newAnnouncementDate); // 계산된 발표일을 상태에 저장
