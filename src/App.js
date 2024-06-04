@@ -329,7 +329,7 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     setGenerationIntervalId(intervalId);
   };
 
-
+  //
   // 자동 생성 중지 함수
   const stopAutoGenerate = () => {
     if (generationIntervalId) {
