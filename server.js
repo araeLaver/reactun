@@ -16,8 +16,6 @@ const port = 8000; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 
 // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
-
-
 // const cors = require('cors');
 app.use(cors()); // 모든 도메인에 대해 요청을 허용
 
