@@ -24,7 +24,7 @@ app.use(cors()); // 모든 도메인에 대해 요청을 허용
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: '221.149.48.232',
+  host: '61.82.123.118',
   user: 'downdan',
   password: 'Untab12#$12',
   database: 'downdan'
