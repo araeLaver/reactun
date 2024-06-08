@@ -473,7 +473,7 @@ function getCurrentDrawNumber() {
   const diff = now - startDateTime;
 
   // 차이를 주 단위로 환산 후, 시작 회차에 더해 현재 회차 계산
-  const currentDrawNumber = 1123
+  const currentDrawNumber = 1122
   //startDrawNumber + Math.floor(diff / oneWeekMilliseconds);
 
   return currentDrawNumber;
