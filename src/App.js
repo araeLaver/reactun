@@ -338,7 +338,8 @@ function calculateAnnouncementDate(selectedDrawNumber) {
       setGenerationIntervalId(null);
     }
   };
-
+ 
+  //
   const handleScrapeAndSaveData = async () => {
     try {
       await axios.get('https://reactun-untab.koyeb.app/scrape');
