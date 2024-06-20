@@ -460,16 +460,11 @@ function formatDate(dateStr) {
 
 // 현재 날짜를 기준으로 회차를 계산하는 함수
 function getCurrentDrawNumber() {
-  // const startDrawNumber = 1111; // 시작 회차
-  // const startDateTime = new Date('2024-03-09T20:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
-
-  const startDrawNumber = 1125; // 시작 회차
-  const startDateTime = new Date('2024-06-15T22:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
-
-  // console.log('startDateTime' + startDateTime)
+  const startDrawNumber = 1111; // 시작 회차
+  const startDateTime = new Date('2024-03-09T20:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
+// console.log('startDateTime' + startDateTime)
   
-
-  // 현재 날짜 및 시간 (UTC 기준으로 조정 필요 시 조정)
+// 현재 날짜 및 시간 (UTC 기준으로 조정 필요 시 조정)
   const now = new Date();
 
   // 한 주의 밀리초 (1000 * 60 * 60 * 24 * 7)
@@ -479,10 +474,7 @@ function getCurrentDrawNumber() {
   const diff = now - startDateTime;
 
   // 차이를 주 단위로 환산 후, 시작 회차에 더해 현재 회차 계산
-  const currentDrawNumber = startDrawNumber + Math.ceil(diff / oneWeekMilliseconds);
-
-  // 차이를 주 단위로 환산 후, 시작 회차에 더해 현재 회차 계산
-  // const currentDrawNumber = 1125
+  const currentDrawNumber = 1125
   //startDrawNumber + Math.floor(diff / oneWeekMilliseconds);
 
   return currentDrawNumber;
