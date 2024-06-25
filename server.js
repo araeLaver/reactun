@@ -17,9 +17,23 @@ const port = 8001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 // const cors = require('cors');
-app.use(cors()); // 모든 도메인에 대해 요청을 허용
+// app.use(cors()); // 모든 도메인에 대해 요청을 허용
 
-app.use(bodyParser.json());
+
+app.use(cors({
+  origin: ['https://araelaver.github.io', 'http://localhost:3000'],
+  credentials: true
+}));
+
+// app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://araelaver.github.io');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+app.options('*', cors());
 
 const pool = new Pool({
   host: 'ep-blue-unit-a2ev3s9x.eu-central-1.pg.koyeb.app',
