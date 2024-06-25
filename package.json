@@ -16,6 +16,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
+    "pg": "^8.12.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -55,5 +56,7 @@
     "concurrently": "^8.2.2",
     "gh-pages": "^6.1.1"
   },
-  "homepage": "https://araeLaver.github.io/reactun"
+  "homepage": "https://araeLaver.github.io/reactun",
+  "proxy": "https://reactun-untab.koyeb.app"
+  
 }

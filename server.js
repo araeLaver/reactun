@@ -1,5 +1,6 @@
 const express = require('express');
-const mysql = require('mysql');
+// const mysql = require('mysql');
+const { Pool } = require('pg');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
@@ -21,19 +22,40 @@ app.use(cors()); // 모든 도메인에 대해 요청을 허용
 
 app.use(bodyParser.json());
 
-const db = mysql.createConnection({
-  host: '61.82.123.118',
-  user: 'downdan',
-  password: 'Untab12#$12',
-  database: 'downdan'
+// const db = mysql.createConnection({
+//   host: '61.82.123.118',
+//   user: 'downdan',
+//   password: 'Untab12#$12',
+//   database: 'downdan'
+// });
+
+// db.connect(err => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//     return;
+//   }
+//   console.log('Connected to MySQL');
+// });
+
+const pool = new Pool({
+  host: 'ep-blue-unit-a2ev3s9x.eu-central-1.pg.koyeb.app',
+  user: 'koyeb-adm',
+  password: 'TRQuyavq9W5B',
+  database: 'koyebdb',
+  port: 5432, // PostgreSQL 기본 포트
+  ssl: {
+    rejectUnauthorized: false // 자체 서명된 인증서를 사용하는 경우
+  }
 });
 
-db.connect(err => {
+
+pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err);
+    console.error('Error connecting to PostgreSQL:', err);
     return;
   }
-  console.log('Connected to MySQL');
+  console.log('Connected to PostgreSQL');
+  release();
 });
 
 // db.on('error', err => {
@@ -48,8 +70,8 @@ db.connect(err => {
 
 // 총 누적 카운트 조회 API
 app.get('/api/total-generated-count', (req, res) => {
-  const query = 'SELECT COUNT(*) AS totalGeneratedCount FROM GeneratedNumbers';
-  db.query(query, (err, results) => {
+  const query = 'SELECT COUNT(*) AS totalGeneratedCount FROM downdan.GeneratedNumbers';
+  pool.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching total generated count:', err);
       res.status(500).send('Error fetching total generated count');
@@ -67,13 +89,13 @@ app.get('/api/weeks', (req, res) => {
 
 // console.log(' ::weeks value:: ');
   // 여기서는 'LottoWinningNumbers' 테이블에서 회차 정보('DrawNumber')를 조회합니다.
-  const query = 'SELECT DISTINCT DrawNumber FROM LottoWinningNumbers ORDER BY DrawNumber DESC';
+  const query = 'SELECT DISTINCT DrawNumber FROM downdan.LottoWinningNumbers ORDER BY DrawNumber DESC';
 //  console.log("ㅇ_ㅇ")
 //  console.log(' ::req.params1:: ' + req);
 // console.log(' ::err:: ' + err);
 // console.log(' ::results:: ' + results);
 
-  db.query(query, (err, results) => {
+  pool.query(query, (err, results) => {
     if (err) {
       console.error('Error fetching weeks data:', err);
       res.status(500).send('Error fetching weeks data');
@@ -114,12 +136,12 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 
     //console.log(' ::drawNumber:: ' + drawNumber);
     // 1. 당첨 번호 및 보너스 번호 가져오기
-    const winningNumbersQuery = `SELECT WinningNumbers, BonusNumber FROM LottoWinningNumbers WHERE DrawNumber = ?`;
+    const winningNumbersQuery = `SELECT WinningNumbers, BonusNumber FROM downdan.LottoWinningNumbers WHERE DrawNumber = ?`;
     // console.log(' ::winningNumbersQuery:: ' + winningNumbersQuery);  
 
 
       // 콜백을 사용하여 쿼리 실행
-      db.query(winningNumbersQuery, [drawNumber], (error, winningNumbersResult) => {
+      pool.query(winningNumbersQuery, [drawNumber], (error, winningNumbersResult) => {
         if (error) {
           console.error('Error fetching winning numbers:', error);
           return res.status(500).json({ error: 'Error fetching winning numbers' });
@@ -139,9 +161,9 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 // console.log('@::winningCounts::@' + WinningNumbers + "@::BonusNumber::@" + BonusNumber);
 
         // 2. 생성된 번호 가져오기
-    const generatedNumbersQuery = `SELECT GeneratedNumbers FROM GeneratedNumbers WHERE DrawNumber = ?`;
+    const generatedNumbersQuery = `SELECT GeneratedNumbers FROM downdan.GeneratedNumbers WHERE DrawNumber = ?`;
     
-    db.query(generatedNumbersQuery, [drawNumber], (error, generatedNumbersResult) => {
+    pool.query(generatedNumbersQuery, [drawNumber], (error, generatedNumbersResult) => {
       if (error) {
         console.error('Error fetching generated numbers:', error);
         return res.status(500).json({ error: 'Error fetching generated numbers' });
@@ -230,8 +252,8 @@ app.post('/api/lotto-numbers', (req, res) => {
  // const sql = 'INSERT INTO GeneratedNumbers (GeneratedNumbers, GenerationWeek, GenerationTime) VALUES (?, ?, ?)';
 // db.query(sql, [generatedNumbers, generationWeek, generationTime], (err, result) => {
 // 데이터베이스에 저장하는 쿼리
-  const sql = 'INSERT INTO GeneratedNumbers (GeneratedNumbers, GenerationWeek, GenerationTime, DrawNumber) VALUES (?, ?, ?, ?)';
-  db.query(sql, [generatedNumbers, generationWeek, generationTime, drawNumber], (err, result) => {
+  const sql = 'INSERT INTO downdan.GeneratedNumbers (GeneratedNumbers, GenerationWeek, GenerationTime, DrawNumber) VALUES (?, ?, ?, ?)';
+  pool.query(sql, [generatedNumbers, generationWeek, generationTime, drawNumber], (err, result) => {
     if (err) {
       console.error('Failed to insert lotto numbers:', err);
       res.status(500).send('Failed to insert data');
@@ -309,14 +331,14 @@ const scrapeAndSaveData = async () => {
       // 데이터베이스에 저장
       //const sql = 'INSERT INTO LottoWinningNumbers (DrawNumber, DrawDate, WinningNumbers, BonusNumber) VALUES (?, ?, ?, ?)';
 
-      const sql = `INSERT INTO LottoWinningNumbers 
+      const sql = `INSERT INTO downdan.LottoWinningNumbers 
                     (DrawNumber, DrawDate, WinningNumbers, BonusNumber, TotalSales, 
                     FirstPrizeWinners, FirstPrizeAmount, SecondPrizeWinners, SecondPrizeAmount, 
                     ThirdPrizeWinners, ThirdPrizeAmount, FourthPrizeWinners, FourthPrizeAmount, 
                     FifthPrizeWinners, FifthPrizeAmount, generationTime) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-      db.query
+      pool.query
       (
            sql
            , [
@@ -387,11 +409,11 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     // 처리된 데이터를 데이터베이스에 삽입
     insertData.forEach(row => {
       const insertQuery = `
-        INSERT INTO LottoResults
+        INSERT INTO downdan.LottoResults
         (Year, DrawNumber, DrawDate, FirstPrizeWinners, FirstPrizeAmount, SecondPrizeWinners, SecondPrizeAmount, ThirdPrizeWinners, ThirdPrizeAmount, FourthPrizeWinners, FourthPrizeAmount, FifthPrizeWinners, FifthPrizeAmount, WinningNumbers, BonusNumber)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      db.query(insertQuery, row, (err, results) => {
+      pool.query(insertQuery, row, (err, results) => {
         if (err) {
           console.error('데이터 삽입 실패:', err);
         }
@@ -413,13 +435,13 @@ app.get('/api/latest-stats', async (req, res) => {
   try {
     const latestDrawQuery = `
       SELECT DrawNumber, COUNT(*) AS TotalCount 
-      FROM GeneratedNumbers 
+      FROM downdan.GeneratedNumbers 
       GROUP BY DrawNumber 
       ORDER BY DrawNumber DESC 
       LIMIT 1;
     `;
 
-    db.query(latestDrawQuery, (error, results) => {
+    pool.query(latestDrawQuery, (error, results) => {
       if (error) {
         console.error('Error fetching latest draw stats:', error);
         return res.status(500).json({ error: 'Error fetching latest draw stats' });
@@ -458,41 +480,25 @@ function formatDate(dateStr) {
   return `${parts[1]}-${parts[2]}-${parts[3]}`;
 }
 
-// 현재 날짜를 기준으로 회차를 계산하는 함수
 function getCurrentDrawNumber() {
-  const startDrawNumber = 1111; // 시작 회차
-  const startDateTime = new Date('2024-03-09T20:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
-// console.log('startDateTime' + startDateTime)
-  const now = new Date();
+  const baseDrawNumber = 1126; // 기준 회차
+  const baseDate = new Date('2024-06-29T04:00:00Z'); // 2024년 6월 29일 토요일 22:00 KST (13:00 UTC)
 
-  // 한 주의 밀리초 (1000 * 60 * 60 * 24 * 7)
-  const oneWeekMilliseconds = 604800000;
-  const diff = now - startDateTime;
-  const currentDrawNumber = 1126
+  const now = new Date();
+  const oneWeekMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1주일을 밀리초로 표현
+
+  // 기준 날짜로부터 경과한 주 수 계산
+  const weeksPassed = Math.floor((now - baseDate) / oneWeekMilliseconds);
+
+  // 현재 시간이 이번 주 토요일 22:00를 지났는지 확인
+  const currentWeekSaturday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds);
+  const hasPassedThisWeeksDraw = now > currentWeekSaturday;
+
+  // 회차 계산
+  const currentDrawNumber = baseDrawNumber + weeksPassed + (hasPassedThisWeeksDraw ? 1 : 0);
 
   return currentDrawNumber;
 }
-
-// // 현재 날짜를 기준으로 회차를 계산하는 함수
-// function getCurrentDrawNumber() {
-//   const startDrawNumber = 1125; // 시작 회차 (현재 회차보다 1 작은 값)
-//   const startDateTime = new Date('2024-06-29T13:00:00Z'); // 시작 날짜 및 시간 (UTC 기준)
-
-//   // 현재 날짜 및 시간 (UTC 기준)
-//   const now = new Date();
-
-//   // 한 주의 밀리초 (1000 * 60 * 60 * 24 * 7)
-//   const oneWeekMilliseconds = 604800000;
-
-//   // 시작 날짜와 현재 날짜의 차이 (밀리초 단위)
-//   const diff = now - startDateTime;
-
-//   // 차이를 주 단위로 환산 후, 시작 회차에 더해 현재 회차 계산
-//   const weeksPassed = Math.floor(diff / oneWeekMilliseconds);
-//   const currentDrawNumber = startDrawNumber + weeksPassed + 1; // 현재 회차에 1을 더함
-
-//   return currentDrawNumber;
-// }
 
 // // 현재 날짜를 기준으로 회차를 계산하는 함수
 // function getCurrentDrawNumber() {
@@ -504,7 +510,8 @@ function getCurrentDrawNumber() {
 //   // 한 주의 밀리초 (1000 * 60 * 60 * 24 * 7)
 //   const oneWeekMilliseconds = 604800000;
 //   const diff = now - startDateTime;
-//   const currentDrawNumber = 1125
+//   const currentDrawNumber = 1126
 
 //   return currentDrawNumber;
 // }
+
