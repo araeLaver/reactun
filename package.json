@@ -17,6 +17,7 @@
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
     "pg": "^8.12.0",
+    "portfinder": "^1.0.32",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -58,5 +59,4 @@
   },
   "homepage": "https://araeLaver.github.io/reactun",
   "proxy": "https://reactun-untab.koyeb.app"
-  
 }

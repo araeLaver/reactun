@@ -1,5 +1,4 @@
 const express = require('express');
-// const mysql = require('mysql');
 const { Pool } = require('pg');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -13,7 +12,7 @@ const xlsx = require('xlsx');
 
 
 const app = express();
-const port = 8000; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
+const port = 8001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
 // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
@@ -22,29 +21,15 @@ app.use(cors()); // 모든 도메인에 대해 요청을 허용
 
 app.use(bodyParser.json());
 
-// const db = mysql.createConnection({
-//   host: '61.82.123.118',
-//   user: 'downdan',
-//   password: 'Untab12#$12',
-//   database: 'downdan'
-// });
-
-// db.connect(err => {
-//   if (err) {
-//     console.error('Error connecting to MySQL:', err);
-//     return;
-//   }
-//   console.log('Connected to MySQL');
-// });
-
 const pool = new Pool({
   host: 'ep-blue-unit-a2ev3s9x.eu-central-1.pg.koyeb.app',
   user: 'koyeb-adm',
   password: 'TRQuyavq9W5B',
   database: 'koyebdb',
-  port: 5432, // PostgreSQL 기본 포트
+  port: 5432,  // PostgreSQL 기본 포트
   ssl: {
-    rejectUnauthorized: false // 자체 서명된 인증서를 사용하는 경우
+    rejectUnauthorized: false,
+    sslmode: 'require'
   }
 });
 
