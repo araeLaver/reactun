@@ -56,5 +56,6 @@
     "concurrently": "^8.2.2",
     "gh-pages": "^6.1.1"
   },
-  "homepage": "https://araeLaver.github.io/reactun"
+  "homepage": "https://araeLaver.github.io/reactun",
+  "proxy": "https://reactun-untab.koyeb.app"
 }

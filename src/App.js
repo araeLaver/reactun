@@ -71,14 +71,18 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     }
   });
 
+  const API_BASE_URL = 'https://reactun-untab.koyeb.app/api/';
+  // 모든 axios 요청에서 이 base URL을 사용
+  // axios.get(`${API_BASE_URL}total-generated-count`)
+
+
   // 특정 번호를 저장할 상태 추가
   // const [includedNumbers, setIncludedNumbers] = useState('');
-
-
   useEffect(() => {
     const fetchTotalGeneratedCount = async () => {
       try {
-        const response = await axios.get('https://reactun-untab.koyeb.app/api/total-generated-count');
+        // const response = await axios.get('https://reactun-untab.koyeb.app/api/total-generated-count');
+        const response = await axios.get(`${API_BASE_URL}total-generated-count`);
         setTotalGeneratedCount(response.data.totalGeneratedCount);
       } catch (error) {
         console.error('Error fetching total generated count:', error);
@@ -108,7 +112,9 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   useEffect(() => {
     const fetchDrawNumbers = async () => {
       try {
-        const response = await axios.get('https://reactun-untab.koyeb.app/api/weeks');
+        // const response = await axios.get('https://reactun-untab.koyeb.app/api/weeks');
+        const response = await axios.get(`${API_BASE_URL}weeks`);
+        
         setDrawNumbers(response.data);
         if (response.data.length > 0) {
           const latestDrawNumber = response.data[0]; // 가장 최근 회차
@@ -132,8 +138,10 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     // fetchDrawNumbers();
     // console.log('selectedDrawNumber', selectedDrawNumber);
     if (selectedDrawNumber) {
-      axios.get(`https://reactun-untab.koyeb.app/api/lotto-stats/${selectedDrawNumber}`)
-        .then(response => {
+     // axios.get(`https://reactun-untab.koyeb.app/api/lotto-stats/${selectedDrawNumber}`)
+     axios.get(`${API_BASE_URL}lotto-stats/${selectedDrawNumber}`)
+    
+      .then(response => {
           const { data } = response;
           // const data = response.data;
   // console.log('@@data@@', data);  
@@ -229,7 +237,9 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
 
       // API를 호출하여 서버에 생성된 번호를 저장
-      axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', {
+      // axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', {
+        axios.post(`${API_BASE_URL}api/weeks`, {
+        
         generatedNumbers: newNumbers,
         generationWeek
       }).then(response => {
@@ -243,7 +253,8 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   // 최신 통계를 가져오는 함수
   const fetchLatestStats = async () => {
     try {
-      const response = await axios.get('https://reactun-untab.koyeb.app/api/latest-stats');
+      //const response = await axios.get('https://reactun-untab.koyeb.app/api/latest-stats');
+      const response = await axios.get(`${API_BASE_URL}latest-stats`);
       setLatestStats(response.data);
     } catch (error) {
       console.error('Error fetching latest stats:', error);
@@ -271,7 +282,9 @@ function calculateAnnouncementDate(selectedDrawNumber) {
     const newNumbers = Array.from(numbers).sort((a, b) => a - b).join(', ');
     const generationWeek = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 주차 정보
 
-    axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', { generatedNumbers: newNumbers,generationWeek })
+    //axios.post('https://reactun-untab.koyeb.app/api/lotto-numbers', { generatedNumbers: newNumbers,generationWeek })
+    axios.post(`${API_BASE_URL}lotto-numbers`, { generatedNumbers: newNumbers,generationWeek })
+    
     .then(response => {
       console.log('Data inserted successfully', response.data);
     })
