@@ -13,7 +13,7 @@ const xlsx = require('xlsx');
 
 
 const app = express();
-const port = 8000; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
+const port = 8001; // Koyeb에서 제공하는 포트 또는 기본 포트 3001 사용
 // Express 서버의 포트 번호를 MySQL 기본 포트와 다르게 설정
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
@@ -187,8 +187,8 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 // console.log(' ::winningCounts:: ' + JSON.stringify(winningCounts));
 
        // 4. 생성된 번호마다 당첨 번호와 비교하여 등수 결정 및 카운트
-        generatedNumbersResult.forEach(({ GeneratedNumbers }) => {
-          if (result && result.GeneratedNumbers) {
+        generatedNumbersResult.forEach(({ row }) => {
+          if (row && result.GeneratedNumbers) {
             //const generatedNumberList = GeneratedNumbers.split(',').map(Number);
             const generatedNumberList = result.GeneratedNumbers.split(',').map(Number);
             const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
