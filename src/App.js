@@ -340,15 +340,15 @@ function calculateAnnouncementDate(selectedDrawNumber) {
   };
  
   //
-  const handleScrapeAndSaveData = async () => {
-    try {
-      await axios.get('https://reactun-untab.koyeb.app/scrape');
-      alert('데이터 스크래핑 및 저장이 완료되었습니다.');
-    } catch (error) {
-      console.error('데이터 스크래핑 및 저장 중 오류가 발생했습니다:', error);
-      alert('데이터 스크래핑 및 저장 중 오류가 발생했습니다.');
-    }
-  };
+  // const handleScrapeAndSaveData = async () => {
+  //   try {
+  //     await axios.get('https://reactun-untab.koyeb.app/scrape');
+  //     alert('데이터 스크래핑 및 저장이 완료되었습니다.');
+  //   } catch (error) {
+  //     console.error('데이터 스크래핑 및 저장 중 오류가 발생했습니다:', error);
+  //     alert('데이터 스크래핑 및 저장 중 오류가 발생했습니다.');
+  //   }
+  // };
 
   const closePopup = () => setAlertVisible(false);
  
