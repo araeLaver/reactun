@@ -137,11 +137,11 @@ app.get('/api/weeks', (req, res) => {
 app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
   try {
     const drawNumber = req.params.drawNumber;
-
-    //console.log(' ::drawNumber:: ' + drawNumber);
+    console.log('회차 체크'); 
+    console.log(' ::drawNumber:: ' + drawNumber);
     // 1. 당첨 번호 및 보너스 번호 가져오기
     const winningNumbersQuery = `SELECT WinningNumbers, BonusNumber FROM LottoWinningNumbers WHERE DrawNumber = ?`;
-    console.log(' ::winningNumbersQuery:: ' + winningNumbersQuery);  
+    // console.log(' ::winningNumbersQuery:: ' + winningNumbersQuery);  
 
 
       // 콜백을 사용하여 쿼리 실행
@@ -151,8 +151,8 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
           return res.status(500).json({ error: 'Error fetching winning numbers' });
         }
 
-        console.log(' ::winningNumbersResult:: ' + JSON.stringify(winningNumbersResult));
-        console.log(' ::winningNumbersResult.length:: ' + winningNumbersResult.length);
+        // console.log(' ::winningNumbersResult:: ' + JSON.stringify(winningNumbersResult));
+        // console.log(' ::winningNumbersResult.length:: ' + winningNumbersResult.length);
 
         // 결과가 없을 경우 오류 처리
         if (winningNumbersResult.length === 0) {
@@ -183,7 +183,7 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
           fifth: 0
       };
 // console.log(' ::generatedNumbersQuery:: ' + generatedNumbersQuery);
-// console.log(' ::generatedNumbersResult:: ' + JSON.stringify(generatedNumbersResult));
+console.log(' ::generatedNumbersResult:: ' + JSON.stringify(generatedNumbersResult));
 // console.log(' ::winningCounts:: ' + JSON.stringify(winningCounts));
 
        // 4. 생성된 번호마다 당첨 번호와 비교하여 등수 결정 및 카운트
