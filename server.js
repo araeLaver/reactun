@@ -22,29 +22,54 @@ app.use(cors()); // 모든 도메인에 대해 요청을 허용
 
 app.use(bodyParser.json());
 
-const db = mysql.createConnection({
-  host: '61.82.123.118',
-  user: 'downdan',
-  password: 'Untab12#$12',
-  database: 'downdan'
-});
-
-db.connect(err => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-    return;
-  }
-  console.log('Connected to MySQL');
-});
-
-// db.on('error', err => {
-//   console.error('db error', err);
-//   if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-//     handleDisconnect();
-//   } else {
-//     throw err;
-//   }
+// const db = mysql.createConnection({
+//   host: '61.82.123.118',
+//   user: 'downdan',
+//   password: 'Untab12#$12',
+//   database: 'downdan'
 // });
+
+// db.connect(err => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//     return;
+//   }
+//   console.log('Connected to MySQL');
+// });
+
+let db; // 전역 변수로 데이터베이스 연결 객체 선언
+
+function handleDisconnect() {
+  db = mysql.createConnection({
+    host: '61.82.123.118',
+    user: 'downdan',
+    password: 'Untab12#$12',
+    database: 'downdan'
+  });
+
+  db.connect(err => {
+    if (err) {
+      console.error('Error connecting to MySQL:', err);
+      setTimeout(handleDisconnect, 2000); // 2초 후 재연결 시도
+    } else {
+      console.log('Connected to MySQL');
+    }
+  });
+
+  db.on('error', err => {
+    console.error('db error', err);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      handleDisconnect(); // 연결이 끊어졌을 때 재연결
+    } else {
+      throw err;
+    }
+  });
+}
+
+// 초기 연결 시도
+handleDisconnect();
+
+// 이후 모든 db.query() 호출은 이 전역 db 객체를 사용합니다.
 
 
 // 총 누적 카운트 조회 API
@@ -163,21 +188,24 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 
        // 4. 생성된 번호마다 당첨 번호와 비교하여 등수 결정 및 카운트
         generatedNumbersResult.forEach(({ GeneratedNumbers }) => {
-          const generatedNumberList = GeneratedNumbers.split(',').map(Number);
-          const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
-          const matchedCount = matchedNumbers.length;
-          const isBonusMatch = generatedNumberList.includes(BonusNumber);
+          if (result && result.GeneratedNumbers) {
+            //const generatedNumberList = GeneratedNumbers.split(',').map(Number);
+            const generatedNumberList = result.GeneratedNumbers.split(',').map(Number);
+            const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
+            const matchedCount = matchedNumbers.length;
+            const isBonusMatch = generatedNumberList.includes(BonusNumber);
 
-          if (matchedCount === 6) {
-              winningCounts.first++;
-          } else if (matchedCount === 5 && isBonusMatch) {
-              winningCounts.second++;
-          } else if (matchedCount === 5) {
-              winningCounts.third++;
-          } else if (matchedCount === 4) {
-              winningCounts.fourth++;
-          } else if (matchedCount === 3) {
-              winningCounts.fifth++;
+            if (matchedCount === 6) {
+                winningCounts.first++;
+            } else if (matchedCount === 5 && isBonusMatch) {
+                winningCounts.second++;
+            } else if (matchedCount === 5) {
+                winningCounts.third++;
+            } else if (matchedCount === 4) {
+                winningCounts.fourth++;
+            } else if (matchedCount === 3) {
+                winningCounts.fifth++;
+            }
           }
       });
 
