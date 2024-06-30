@@ -187,10 +187,10 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
 // console.log(' ::winningCounts:: ' + JSON.stringify(winningCounts));
 
        // 4. 생성된 번호마다 당첨 번호와 비교하여 등수 결정 및 카운트
-        generatedNumbersResult.forEach(({ row }) => {
-          if (row && result.GeneratedNumbers) {
-            //const generatedNumberList = GeneratedNumbers.split(',').map(Number);
-            const generatedNumberList = result.GeneratedNumbers.split(',').map(Number);
+        generatedNumbersResult.forEach(({ GeneratedNumbers }) => {
+          // if (GeneratedNumbers && result.GeneratedNumbers) {
+            const generatedNumberList = GeneratedNumbers.split(',').map(Number);
+            //const generatedNumberList = result.GeneratedNumbers.split(',').map(Number);
             const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
             const matchedCount = matchedNumbers.length;
             const isBonusMatch = generatedNumberList.includes(BonusNumber);
@@ -206,7 +206,7 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
             } else if (matchedCount === 3) {
                 winningCounts.fifth++;
             }
-          }
+          //}
       });
 
          // 5. 전체 생성된 번호 수 계산
