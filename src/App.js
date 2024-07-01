@@ -123,6 +123,16 @@ function App() {
     }
   }, [selectedDrawNumber]);
 
+  // const calculateAnnouncementDate = (selectedDrawNumber) => {
+  //   const baseDrawNumber = 1126;
+  //   const baseAnnouncementDate = new Date('2024-06-29T13:00:00Z');
+  //   const selectedDraw = parseInt(selectedDrawNumber, 10);
+  //   const weeksDifference = selectedDraw - baseDrawNumber;
+  //   const announcementDate = new Date(baseAnnouncementDate);
+  //   announcementDate.setDate(announcementDate.getDate() + weeksDifference * 7);
+  //   return announcementDate.toISOString().slice(0, 10);
+  // };
+
   const calculateAnnouncementDate = (selectedDrawNumber) => {
     const baseDrawNumber = 1126;
     const baseAnnouncementDate = new Date('2024-06-29T13:00:00Z');
@@ -130,6 +140,11 @@ function App() {
     const weeksDifference = selectedDraw - baseDrawNumber;
     const announcementDate = new Date(baseAnnouncementDate);
     announcementDate.setDate(announcementDate.getDate() + weeksDifference * 7);
+    // 기본 날짜에 더해진 주차로 설정한 날짜보다 크면 7일을 더함
+    const currentDate = new Date();
+    if (announcementDate <= currentDate) {
+      announcementDate.setDate(announcementDate.getDate() + 7);
+    }
     return announcementDate.toISOString().slice(0, 10);
   };
 
