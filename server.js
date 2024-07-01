@@ -177,7 +177,7 @@ const scrapeAndSaveData = async () => {
     const secondPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(1).find('td').eq(3).text().replace(/\D+/g, '');
     const thirdPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(2).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const thirdPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(2).find('td').eq(3).text().replace(/\D+/g, '');
-    const fourthPrizeWinnersMatch = parseInt($('..tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(2).text().replace(/,/g, ''), 10); 
+    const fourthPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const fourthPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(3).text().replace(/\D+/g, '');
     const fifthPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(4).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const fifthPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(4).find('td').eq(3).text().replace(/\D+/g, '');
