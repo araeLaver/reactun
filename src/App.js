@@ -124,8 +124,8 @@ function App() {
   }, [selectedDrawNumber]);
 
   const calculateAnnouncementDate = (selectedDrawNumber) => {
-    const baseDrawNumber = 1113;
-    const baseAnnouncementDate = new Date('2024-04-06');
+    const baseDrawNumber = 1126;
+    const baseAnnouncementDate = new Date('2024-06-29T13:00:00Z');
     const selectedDraw = parseInt(selectedDrawNumber, 10);
     const weeksDifference = selectedDraw - baseDrawNumber;
     const announcementDate = new Date(baseAnnouncementDate);

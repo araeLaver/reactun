@@ -1,7 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const axios = require('axios');
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
@@ -13,7 +13,8 @@ const xlsx = require('xlsx');
 const app = express();
 const port = 8000; 
 
-app.use(cors()); 
+app.use(cors()); // 모든 도메인에 대해 요청을 허용
+
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
@@ -176,7 +177,7 @@ const scrapeAndSaveData = async () => {
     const secondPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(1).find('td').eq(3).text().replace(/\D+/g, '');
     const thirdPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(2).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const thirdPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(2).find('td').eq(3).text().replace(/\D+/g, '');
-    const fourthPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(2).text().replace(/,/g, ''), 10); 
+    const fourthPrizeWinnersMatch = parseInt($('..tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const fourthPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(3).find('td').eq(3).text().replace(/\D+/g, '');
     const fifthPrizeWinnersMatch = parseInt($('.tbl_data.tbl_data_col tbody tr').eq(4).find('td').eq(2).text().replace(/,/g, ''), 10); 
     const fifthPrizeAmountMatch = $('.tbl_data.tbl_data_col tbody tr').eq(4).find('td').eq(3).text().replace(/\D+/g, '');
