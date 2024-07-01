@@ -95,21 +95,23 @@ app.get('/api/lotto-stats/:drawNumber', async (req, res) => {
         };
 
         generatedNumbersResult.forEach(({ GeneratedNumbers }) => {
-          const generatedNumberList = GeneratedNumbers.split(',').map(Number);
-          const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
-          const matchedCount = matchedNumbers.length;
-          const isBonusMatch = generatedNumberList.includes(BonusNumber);
+          if (GeneratedNumbers) {
+            const generatedNumberList = GeneratedNumbers.split(',').map(Number);
+            const matchedNumbers = generatedNumberList.filter(num => WinningNumbers.includes(num));
+            const matchedCount = matchedNumbers.length;
+            const isBonusMatch = generatedNumberList.includes(BonusNumber);
 
-          if (matchedCount === 6) {
-            winningCounts.first++;
-          } else if (matchedCount === 5 && isBonusMatch) {
-            winningCounts.second++;
-          } else if (matchedCount === 5) {
-            winningCounts.third++;
-          } else if (matchedCount === 4) {
-            winningCounts.fourth++;
-          } else if (matchedCount === 3) {
-            winningCounts.fifth++;
+            if (matchedCount === 6) {
+              winningCounts.first++;
+            } else if (matchedCount === 5 && isBonusMatch) {
+              winningCounts.second++;
+            } else if (matchedCount === 5) {
+              winningCounts.third++;
+            } else if (matchedCount === 4) {
+              winningCounts.fourth++;
+            } else if (matchedCount === 3) {
+              winningCounts.fifth++;
+            }
           }
         });
 
