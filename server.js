@@ -335,6 +335,6 @@ function getCurrentDrawNumber() {
   const currentWeekSaturday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds);
   const hasPassedThisWeeksDraw = now > currentWeekSaturday;
   //const currentDrawNumber = baseDrawNumber + (hasPassedThisWeeksDraw ? 1 : 0);
-  const currentDrawNumber = 1137;  
+  const currentDrawNumber = 1138;  
   return currentDrawNumber; // 
 }
