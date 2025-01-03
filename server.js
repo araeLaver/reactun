@@ -18,7 +18,7 @@ app.use(cors()); // 모든 도메인에 대해 요청을 허용
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: '61.82.123.118',
+  host: '220.88.32.198',
   user: 'downdan',
   password: 'Untab12#$12',
   database: 'downdan'
@@ -335,6 +335,6 @@ function getCurrentDrawNumber() {
   const currentWeekSaturday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds);
   const hasPassedThisWeeksDraw = now > currentWeekSaturday;
   //const currentDrawNumber = baseDrawNumber + (hasPassedThisWeeksDraw ? 1 : 0);
-  const currentDrawNumber = 1150;  
+  const currentDrawNumber = 1153;  
   return currentDrawNumber; // 
 }
