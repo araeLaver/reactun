@@ -327,14 +327,30 @@ function formatDate(dateStr) {
 }
 
 function getCurrentDrawNumber() {
-  const baseDrawNumber = 1126;
-  const baseDate = new Date('2024-06-29T13:00:00Z'); 
+  const baseDrawNumber = 1154; // 2025년 1월 4일 기준 회차
+  const baseDate = new Date('2025-01-04T15:00:00Z'); // UTC 기준 토요일 22시
   const now = new Date();
   const oneWeekMilliseconds = 7 * 24 * 60 * 60 * 1000;
   const weeksPassed = Math.floor((now - baseDate) / oneWeekMilliseconds);
-  const currentWeekSaturday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds);
-  const hasPassedThisWeeksDraw = now > currentWeekSaturday;
-  //const currentDrawNumber = baseDrawNumber + (hasPassedThisWeeksDraw ? 1 : 0);
-  const currentDrawNumber = 1153;  
-  return currentDrawNumber; // 
+  
+  // 현재 주의 토요일 24시 05분 (일요일 00시 05분)
+  const currentWeekSunday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds + 2 * 60 * 60 * 1000 + 5 * 60 * 1000);
+  
+  const hasPassedThisWeeksDraw = now > currentWeekSunday;
+  const currentDrawNumber = baseDrawNumber + weeksPassed + (hasPassedThisWeeksDraw ? 1 : 0);
+  
+  return currentDrawNumber;
 }
+
+// function getCurrentDrawNumber() {
+//   const baseDrawNumber = 1126;
+//   const baseDate = new Date('2024-06-29T13:00:00Z'); 
+//   const now = new Date();
+//   const oneWeekMilliseconds = 7 * 24 * 60 * 60 * 1000;
+//   const weeksPassed = Math.floor((now - baseDate) / oneWeekMilliseconds);
+//   const currentWeekSaturday = new Date(baseDate.getTime() + weeksPassed * oneWeekMilliseconds);
+//   const hasPassedThisWeeksDraw = now > currentWeekSaturday;
+//   //const currentDrawNumber = baseDrawNumber + (hasPassedThisWeeksDraw ? 1 : 0);
+//   const currentDrawNumber = 1154;  
+//   return currentDrawNumber; // 
+// }
