@@ -327,7 +327,7 @@ function formatDate(dateStr) {
 }
 
 function getCurrentDrawNumber() {
-  const baseDrawNumber = 1154; // 2025년 1월 4일 기준 회차
+  const baseDrawNumber = 1153; // 2025년 1월 4일 기준 회차
   const baseDate = new Date('2025-01-04T15:00:00Z'); // UTC 기준 토요일 22시
   const now = new Date();
   const oneWeekMilliseconds = 7 * 24 * 60 * 60 * 1000;
