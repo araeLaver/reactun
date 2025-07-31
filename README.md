@@ -7,7 +7,7 @@
 
 > **풀스택 로또 번호 생성기** - 실시간 데이터 수집, 통계 분석, 시각화를 통한 종합적인 로또 관리 도구
 
-🌐 **Live Demo**: [reactun-untab.koyeb.app](https://reactun-untab.koyeb.app)
+🌐 **Live Demo**: https://araelaver.github.io/reactun/
 
 ---
 
