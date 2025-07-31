@@ -324,7 +324,7 @@ koyeb secret create DB_NAME --value="reactun"
 ```javascript
 const cron = require('node-cron');
 
-// 매주 토요일 13시에 로또 결과 수집
+// 매주 토요일에 로또 결과 수집
 cron.schedule('0 13 * * 6', async () => {
   try {
     const latestResults = await scrapeLottoResults();
