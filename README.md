@@ -248,23 +248,6 @@ CMD ["npm", "start"]
 - **API Caching**: 응답 캐싱 구현
 - **Error Boundary**: 안정적인 에러 처리
 
-## 🤝 Contributing
-
-1. **Fork the Project**
-2. **Create Feature Branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit Changes** (`git commit -m 'Add AmazingFeature'`)
-4. **Push to Branch** (`git push origin feature/AmazingFeature`)
-5. **Open Pull Request**
-
-### 개발 컨벤션
-- **Commit Message**: [Conventional Commits](https://conventionalcommits.org/) 형식
-- **Branch Naming**: `feature/`, `bugfix/`, `hotfix/` 접두사 사용
-- **Code Review**: 모든 PR은 리뷰 필수
-
-## 📄 라이선스
-
-이 프로젝트는 **MIT License** 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
-
 ## 🏆 프로젝트 성과
 
 - 🎯 **실용성**: 실제 사용 가능한 로또 도구
@@ -272,6 +255,3 @@ CMD ["npm", "start"]
 - ⚡ **성능**: 평균 응답시간 200ms 이하
 - 📱 **접근성**: 모든 기기에서 완벽한 사용자 경험
 
----
-
-💡 **문의사항이나 개선 제안은 [Issues](https://github.com/araeLaver/reactun/issues)를 통해 언제든 연락해주세요!**
